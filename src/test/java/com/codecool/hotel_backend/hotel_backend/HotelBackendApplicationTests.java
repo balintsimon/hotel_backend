@@ -1,10 +1,10 @@
-package com.hotel_backend.demo;
+package com.codecool.hotel_backend.hotel_backend;
 
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.SpringBootTest;
 
 @SpringBootTest
-class DemoApplicationTests {
+class HotelBackendApplicationTests {
 
     @Test
     void contextLoads() {
