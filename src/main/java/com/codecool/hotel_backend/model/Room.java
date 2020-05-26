@@ -1,4 +1,4 @@
-package com.codecool.hotel_backend.model.room;
+package com.codecool.hotel_backend.model;
 
 import lombok.Getter;
 import lombok.Setter;
