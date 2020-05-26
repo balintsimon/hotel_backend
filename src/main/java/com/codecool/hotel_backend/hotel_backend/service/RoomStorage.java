@@ -1,6 +1,6 @@
 package com.codecool.hotel_backend.hotel_backend.service;
 
-import com.codecool.hotel_backend.hotel_backend.model.Room;
+import com.codecool.hotel_backend.hotel_backend.model.room.Room;
 import lombok.Getter;
 import org.springframework.stereotype.Service;
 

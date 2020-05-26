@@ -1,9 +1,9 @@
 package com.codecool.hotel_backend.hotel_backend.service;
 
-import com.codecool.hotel_backend.hotel_backend.model.Luxury;
-import com.codecool.hotel_backend.hotel_backend.model.RockstarSuite;
-import com.codecool.hotel_backend.hotel_backend.model.Room;
-import com.codecool.hotel_backend.hotel_backend.model.SuperiorStreetView;
+import com.codecool.hotel_backend.hotel_backend.model.room.Luxury;
+import com.codecool.hotel_backend.hotel_backend.model.room.RockstarSuite;
+import com.codecool.hotel_backend.hotel_backend.model.room.Room;
+import com.codecool.hotel_backend.hotel_backend.model.room.SuperiorStreetView;
 
 import java.util.ArrayList;
 import java.util.List;
