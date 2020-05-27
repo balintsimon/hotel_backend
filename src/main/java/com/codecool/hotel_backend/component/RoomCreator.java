@@ -20,7 +20,6 @@ public class RoomCreator {
             roomStorage.add(new Room(new RockstarSuite()));
         }
 
-
         return roomStorage;
     }
 }
