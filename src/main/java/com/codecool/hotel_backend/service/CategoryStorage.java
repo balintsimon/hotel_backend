@@ -31,13 +31,12 @@ public class CategoryStorage {
     }
     public HashMap<Integer,Integer> getNumberOfAvailableRoomsByCategory(List<Room> roomList){
         HashMap<Integer,Integer> resultMap=new HashMap<>();
-        for (int i=0; i<categoryStorage.size(); i++){
+        for (int i=1; i<=categoryStorage.size(); i++){
             int counter=0;
             for(Room room:roomList){
                 if(room.getCategory().getId()==i){
                     counter++;
                 }
-
             }
             resultMap.put(i,counter);
         }
