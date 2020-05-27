@@ -13,12 +13,10 @@
     <version>0.0.1-SNAPSHOT</version>
     <name>hotel_backend</name>
     <description>hotel_backend</description>
-
     <properties>
         <java.version>1.8</java.version>
         <start-class>com.codecool.hotel_backend.HotelBackendApplication</start-class>
     </properties>
-
     <dependencies>
 <!--        <dependency>-->
 <!--            <groupId>org.springframework.boot</groupId>-->
