@@ -1,4 +1,4 @@
-package com.codecool.hotel_backend.hotel_backend;
+package com.codecool.hotel_backend;
 
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.SpringBootTest;
