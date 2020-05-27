@@ -43,4 +43,16 @@ public class CategoryStorage {
         }
         return resultMap;
     }
+    public HashMap<Integer,Integer> getNumberOfAvailableRoomsByCategoryId(List<Room> roomList,int id){
+        HashMap<Integer,Integer> resultMap=new HashMap<>();
+            int counter=0;
+            for(Room room:roomList){
+                if(room.getCategory().getId()==id){
+                    counter++;
+                }
+            }
+            resultMap.put(id,counter);
+
+        return resultMap;
+    }
 }

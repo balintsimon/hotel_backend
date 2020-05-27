@@ -5,6 +5,7 @@ import com.codecool.hotel_backend.service.CategoryStorage;
 import com.codecool.hotel_backend.service.RoomStorage;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -30,9 +31,14 @@ public class RoomController {
         return roomStorage.getRoomStorage();
     }
 
-    @GetMapping("/numberOfAvailableByCategory")
+    @GetMapping("/numberOfAvailableRoomsByCategory")
     public HashMap<Integer, Integer> getNumberOfAvailableRoomsByCategory(){
         return categoryStorage.getNumberOfAvailableRoomsByCategory(roomStorage.getAllAvailableRooms());
+    }
+
+    @GetMapping("/numberOfAvailableRoomsByCategory/{id}")
+    public HashMap<Integer, Integer> getNumberOfAvailableRoomsByCategoryId(@PathVariable("id") int id){
+        return categoryStorage.getNumberOfAvailableRoomsByCategoryId(roomStorage.getAllAvailableRooms(),id);
     }
 
 
