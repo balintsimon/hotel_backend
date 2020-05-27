@@ -12,11 +12,11 @@ import java.util.List;
 @Component
 public class CategoryCreator {
 
-    public List<Category> createCategories(){
+    public List<Category> createCategories(Luxury luxury,SuperiorStreetView superiorStreetView,RockstarSuite rockstarSuite){
         ArrayList<Category> categoryStorage = new ArrayList<>();
-        categoryStorage.add(new Luxury());
-        categoryStorage.add(new SuperiorStreetView());
-        categoryStorage.add(new RockstarSuite());
+        categoryStorage.add(luxury);
+        categoryStorage.add(superiorStreetView);
+        categoryStorage.add(rockstarSuite);
         return categoryStorage;
     }
 }

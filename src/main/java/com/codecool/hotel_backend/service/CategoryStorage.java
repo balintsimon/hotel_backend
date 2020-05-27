@@ -1,8 +1,7 @@
 package com.codecool.hotel_backend.service;
 
 import com.codecool.hotel_backend.component.CategoryCreator;
-import com.codecool.hotel_backend.model.Category;
-import com.codecool.hotel_backend.model.Room;
+import com.codecool.hotel_backend.model.*;
 import lombok.Getter;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -18,7 +17,7 @@ public class CategoryStorage {
     @Autowired
     public CategoryStorage(CategoryCreator categoryCreator) {
         this.categoryCreator = categoryCreator;
-        categoryStorage = categoryCreator.createCategories();
+        categoryStorage = categoryCreator.createCategories(new Luxury(),new SuperiorStreetView(),new RockstarSuite());
     }
 
     public Category getCategoryById(int id){
