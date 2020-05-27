@@ -33,6 +33,7 @@ public class RoomStorage {
         return resultList;
     }
 
+
     public void reserveARoom(int id){
         for (Room room:roomStorage){
             if (room.getCategory().getId() == id){
@@ -43,6 +44,17 @@ public class RoomStorage {
             }
         }
     }
+
+    public List<Room> getAllOccupiedRooms(){
+        List<Room> resultList = new ArrayList<>();
+        for (Room room : roomStorage){
+            if(room.isOccupied()==true){
+                resultList.add(room);
+            }
+        }
+        return resultList;
+    }
+
 
 
 
