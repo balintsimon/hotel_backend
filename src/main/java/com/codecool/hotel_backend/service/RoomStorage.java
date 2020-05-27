@@ -33,6 +33,16 @@ public class RoomStorage {
         return resultList;
     }
 
+    public List<Room> getAllOccupiedRooms(){
+        List<Room> resultList = new ArrayList<>();
+        for (Room room : roomStorage){
+            if(room.isOccupied()==true){
+                resultList.add(room);
+            }
+        }
+        return resultList;
+    }
+
 
 
 

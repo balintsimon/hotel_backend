@@ -41,5 +41,10 @@ public class RoomController {
         return categoryStorage.getNumberOfAvailableRoomsByCategoryId(roomStorage.getAllAvailableRooms(),id);
     }
 
+    @GetMapping("/allOccupiedRooms")
+    public List<Room> getAllOccupiedRooms(){
+        return roomStorage.getAllOccupiedRooms();
+    }
+
 
 }
