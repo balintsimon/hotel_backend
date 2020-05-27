@@ -33,6 +33,18 @@ public class RoomStorage {
         return resultList;
     }
 
+
+    public void reserveARoom(int id){
+        for (Room room:roomStorage){
+            if (room.getCategory().getId() == id){
+                if (!room.isOccupied()){
+                    room.setOccupied(true);
+                    break;
+                }
+            }
+        }
+    }
+
     public List<Room> getAllOccupiedRooms(){
         List<Room> resultList = new ArrayList<>();
         for (Room room : roomStorage){
