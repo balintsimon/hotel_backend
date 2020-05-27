@@ -8,6 +8,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import java.util.HashMap;
 import java.util.List;
 
 @RestController
@@ -15,15 +16,24 @@ import java.util.List;
 @RequestMapping("/room")
 public class RoomController {
     RoomStorage roomStorage;
+    CategoryStorage categoryStorage;
 
     @Autowired
     public RoomController(RoomStorage roomStorage, CategoryStorage categoryStorage ){
         this.roomStorage = roomStorage;
+        this.categoryStorage=categoryStorage;
+
     }
 
     @GetMapping("/all")
     public List<Room> getAllRoom(){
         return roomStorage.getRoomStorage();
     }
+
+    @GetMapping("/numberOfAvailableByCategory")
+    public HashMap<Integer, Integer> getNumberOfAvailableRoomsByCategory(){
+        return categoryStorage.getNumberOfAvailableRoomsByCategory(roomStorage.getAllAvailableRooms());
+    }
+
 
 }
