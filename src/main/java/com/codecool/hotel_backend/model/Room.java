@@ -4,7 +4,7 @@ import lombok.Getter;
 import lombok.Setter;
 
 public class Room {
-    private static int idCounter = 0;
+    private static int idCounter = 1;
     private  @Getter @Setter int id;
     private  @Getter @Setter Category category;
     private  @Getter @Setter boolean isOccupied;
