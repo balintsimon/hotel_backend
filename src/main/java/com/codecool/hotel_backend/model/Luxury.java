@@ -9,4 +9,15 @@ public class Luxury extends Category{
         capacity = 6;
         size = 25;
     }
+
+    @Override
+    public String toString() {
+        return "Luxury{" +
+                "id=" + id +
+                ", size=" + size +
+                ", name='" + name + '\'' +
+                ", description='" + description + '\'' +
+                ", capacity=" + capacity +
+                '}';
+    }
 }
