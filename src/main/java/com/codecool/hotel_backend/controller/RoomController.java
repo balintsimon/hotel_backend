@@ -38,11 +38,6 @@ public class RoomController {
         return categoryStorage.getNumberOfAvailableRoomsByCategoryId(roomStorage.getAllAvailableRooms(),id);
     }
 
-    @PostMapping("/reservation")
-    public void reserveARoomByCategoryId(@RequestBody Map<String, Integer> map){
-        roomStorage.reserveARoom(map.get("id"));
-    }
-
     @GetMapping("/allOccupiedRooms")
     public List<Room> getAllOccupiedRooms(){
         return roomStorage.getAllOccupiedRooms();
