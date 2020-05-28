@@ -1,6 +1,7 @@
 package com.codecool.hotel_backend.controller;
 
 import com.codecool.hotel_backend.model.Category;
+import com.codecool.hotel_backend.model.Room;
 import com.codecool.hotel_backend.service.CategoryStorage;
 import com.codecool.hotel_backend.service.RoomStorage;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -32,7 +33,7 @@ public class CategoryController {
     }
 
     @RequestMapping(value = "/reserve/{id}", method = RequestMethod.POST)
-    public void reserveARoomByCategoryId(@PathVariable("id") int id){
-        roomStorage.reserveARoom(id);
+    public Room reserveARoomByCategoryId(@PathVariable("id") int id){
+        return roomStorage.reserveARoom(id);
     }
 }

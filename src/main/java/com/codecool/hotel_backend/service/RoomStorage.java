@@ -34,15 +34,16 @@ public class RoomStorage {
     }
 
 
-    public void reserveARoom(int id){
+    public Room reserveARoom(int id){
         for (Room room:roomStorage){
             if (room.getCategory().getId() == id){
                 if (!room.isOccupied()){
                     room.setOccupied(true);
-                    break;
+                    return room;
                 }
             }
         }
+        return null;
     }
 
     public List<Room> getAllOccupiedRooms(){
