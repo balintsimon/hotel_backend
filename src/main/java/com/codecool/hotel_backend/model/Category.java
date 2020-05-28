@@ -9,4 +9,5 @@ public abstract class Category {
     protected @Getter @Setter String name;
     protected @Getter @Setter String description;
     protected @Getter @Setter int capacity;
+    protected @Getter @Setter String imgUrl;
 }
