@@ -3,6 +3,7 @@ package com.codecool.hotel_backend;
 import com.codecool.hotel_backend.component.RoomCreator;
 import com.codecool.hotel_backend.model.Category;
 import com.codecool.hotel_backend.model.Luxury;
+import com.codecool.hotel_backend.model.RockstarSuite;
 import com.codecool.hotel_backend.model.Room;
 import com.codecool.hotel_backend.service.CategoryStorage;
 import com.codecool.hotel_backend.service.RoomStorage;
@@ -55,6 +56,23 @@ class HotelBackendApplicationTests {
         RoomStorage roomStorage=new RoomStorage(roomCreator1);
 
         assertEquals(roomStorage.getAllOccupiedRooms().size(),1);
+    }
+
+    @Test
+    void reserveARoomTest(){
+        List<Room> roomList=new ArrayList<>();
+        Category category=new Luxury(); //getter
+        Room room1=new Room(category); //getter
+        roomList.add(room1);
+
+        RoomCreator roomCreator1=mock(RoomCreator.class);
+        when(roomCreator1.createRooms()).thenReturn(roomList);
+        RoomStorage roomStorage=new RoomStorage(roomCreator1);
+
+        roomStorage.reserveARoom(1);
+
+        assertEquals(roomStorage.getAllOccupiedRooms().size(),1);
+
     }
 
 
