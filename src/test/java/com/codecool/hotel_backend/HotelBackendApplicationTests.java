@@ -3,13 +3,9 @@ package com.codecool.hotel_backend;
 import com.codecool.hotel_backend.component.RoomCreator;
 import com.codecool.hotel_backend.model.Category;
 import com.codecool.hotel_backend.model.Luxury;
-import com.codecool.hotel_backend.model.RockstarSuite;
 import com.codecool.hotel_backend.model.Room;
-import com.codecool.hotel_backend.service.CategoryStorage;
 import com.codecool.hotel_backend.service.RoomStorage;
 import org.junit.jupiter.api.Test;
-import org.mockito.Mockito;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 
 import java.util.ArrayList;
@@ -21,10 +17,6 @@ import static org.mockito.Mockito.*;
 @SpringBootTest
 class HotelBackendApplicationTests {
 
-    @Autowired
-    private RoomStorage roomStorage;
-    @Autowired
-    private CategoryStorage categoryStorage;
 
     @Test
     void getAllAvailableRoomsTestSize() {
@@ -74,14 +66,6 @@ class HotelBackendApplicationTests {
         assertEquals(roomStorage.getAllOccupiedRooms().size(),1);
 
     }
-
-
-    @Test
-    void getCategoryByIdTestForValid(){
-        assertEquals(categoryStorage.getCategoryById(1).toString(), new Luxury().toString());
-    }
-
-
 
 
 }
