@@ -1,11 +1,13 @@
 package com.codecool.hotel_backend;
 
+import com.codecool.hotel_backend.component.RoomCreator;
 import com.codecool.hotel_backend.model.Category;
 import com.codecool.hotel_backend.model.Luxury;
 import com.codecool.hotel_backend.model.Room;
 import com.codecool.hotel_backend.service.CategoryStorage;
 import com.codecool.hotel_backend.service.RoomStorage;
 import org.junit.jupiter.api.Test;
+import org.mockito.Mockito;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 
@@ -23,35 +25,35 @@ class HotelBackendApplicationTests {
     @Autowired
     private CategoryStorage categoryStorage;
 
-    //TESTS WITH MOCKING
     @Test
-    void getAllAvailableRoomsMockingTest() {
-        RoomStorage roomStorage=mock(RoomStorage.class);
+    void getAllAvailableRoomsTestSize() {
+        List<Room> roomList=new ArrayList<>();
+        Room room1=mock(Room.class);
+        roomList.add(room1);
+        roomList.add(room1);
+
+        RoomCreator roomCreator1=mock(RoomCreator.class);
+        when(roomCreator1.createRooms()).thenReturn(roomList);
+        RoomStorage roomStorage=new RoomStorage(roomCreator1);
+
+        assertEquals(roomStorage.getAllAvailableRooms().size(),2);
+    }
+
+    @Test
+    void getAllOccupiedRoomsTest(){
+
+        List<Room> roomList=new ArrayList<>();
         Category category=mock(Category.class);
+        Room room1=mock(Room.class);
+        Room room2=new Room(category);
+        room2.setOccupied(true);
+        roomList.add(room1);
+        roomList.add(room2);
 
-        List<Room> roomList=mock(ArrayList.class);
-        roomList.add(new Room(category));
+        RoomCreator roomCreator1=mock(RoomCreator.class);
+        when(roomCreator1.createRooms()).thenReturn(roomList);
+        RoomStorage roomStorage=new RoomStorage(roomCreator1);
 
-        when(roomStorage.getAllAvailableRooms()).thenReturn(roomList);
-
-        assertEquals(roomStorage.getAllAvailableRooms(),roomList);
-    }
-
-
-    //TESTS WITHOUT MOCKING
-    @Test
-    void getAllAvailableRoomsTest(){
-        assertEquals(roomStorage.getAllAvailableRooms().size(),30);
-    }
-
-    @Test
-    void getAllOccupiedRoomsTestForZero(){
-        assertEquals(roomStorage.getAllOccupiedRooms().size(),0);
-    }
-
-    @Test
-    void getAllOccupiedRoomsTestForOne(){
-        roomStorage.reserveARoom(1);
         assertEquals(roomStorage.getAllOccupiedRooms().size(),1);
     }
 
