@@ -16,7 +16,7 @@ public class Room {
     @GeneratedValue
     private Long Id;
 
-    @Enumerated(EnumType.STRING)
+    @ManyToOne
     private Category category;
 
     private boolean isOccupied;
