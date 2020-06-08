@@ -10,6 +10,7 @@ public class Luxury extends Category{
         capacity = 6;
         size = 25;
     }
+    //Edit for push ;)
 
     @Override
     public String toString() {
