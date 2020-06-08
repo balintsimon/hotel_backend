@@ -20,7 +20,7 @@ public class Category {
     @EqualsAndHashCode.Exclude
     private List<Room> room;
 
-    private Long size; // size as in squaremeters
+    private Long size; // size as in square meters
     private String name;
     private String description;
     private Long capacity;
