@@ -1,4 +1,4 @@
-package com.codecool.hotel_backend.service;
+package com.codecool.hotel_backend.component;
 
 import com.codecool.hotel_backend.model.Luxury;
 import com.codecool.hotel_backend.model.RockstarSuite;
@@ -15,11 +15,10 @@ public class RoomCreator {
     public List<Room> createRooms(){
         ArrayList<Room> roomStorage = new ArrayList<>();
         for (int i = 0; i < 10; i++) {
-            roomStorage.add(new Luxury());
-            roomStorage.add(new SuperiorStreetView());
-            roomStorage.add(new RockstarSuite());
+            roomStorage.add(new Room(new Luxury()));
+            roomStorage.add(new Room(new SuperiorStreetView()));
+            roomStorage.add(new Room(new RockstarSuite()));
         }
-
 
         return roomStorage;
     }
