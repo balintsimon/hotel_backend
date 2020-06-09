@@ -94,6 +94,7 @@ public class HotelBackendApplication {
             categoryRepository.save(luxury);
             categoryRepository.save(superiorStreetView);
             categoryRepository.save(rockStarSuite);
+            reservationRepository.save(reservation);
             roomRepository.saveAll(luxuryRooms);
             roomRepository.saveAll(superiorRooms);
             roomRepository.saveAll(rockStarRooms);

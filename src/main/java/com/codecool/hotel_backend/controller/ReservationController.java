@@ -4,7 +4,6 @@ import com.codecool.hotel_backend.model.Room;
 import com.codecool.hotel_backend.repository.CategoryRepository;
 import com.codecool.hotel_backend.repository.ReservationRepository;
 import com.codecool.hotel_backend.service.RoomStorage;
-import jdk.vm.ci.meta.Local;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.access.method.P;
 import org.springframework.web.bind.annotation.*;

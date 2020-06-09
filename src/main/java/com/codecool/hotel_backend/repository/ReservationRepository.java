@@ -26,7 +26,7 @@ public interface ReservationRepository extends JpaRepository<Reservation, Long> 
 //    @Modifying(clearAutomatically = true)
 
 
-    @Query(value = "UPDATE Reservation r SET ")
-    boolean enterNewReservation(Long id, LocalDate startTime, LocalDate endTime);
+//    @Query(value = "UPDATE Reservation r SET ")
+//    boolean enterNewReservation(Long id, LocalDate startTime, LocalDate endTime);
 
 }
