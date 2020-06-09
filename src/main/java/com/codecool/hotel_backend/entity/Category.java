@@ -16,6 +16,8 @@ public class Category {
     @GeneratedValue
     private Long Id;
 
+    private Long categoryId;
+
     @OneToMany(mappedBy = "category", cascade = {CascadeType.PERSIST, CascadeType.REMOVE})
     @EqualsAndHashCode.Exclude
     private List<Room> room;
