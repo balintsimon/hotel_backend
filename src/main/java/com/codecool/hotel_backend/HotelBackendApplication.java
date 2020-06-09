@@ -3,6 +3,7 @@ package com.codecool.hotel_backend;
 import com.codecool.hotel_backend.entity.Category;
 import com.codecool.hotel_backend.entity.Room;
 import com.codecool.hotel_backend.repository.CategoryRepository;
+import com.codecool.hotel_backend.repository.RoomRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.boot.SpringApplication;
@@ -18,6 +19,9 @@ public class HotelBackendApplication {
 
     @Autowired
     CategoryRepository categoryRepository;
+
+    @Autowired
+    RoomRepository roomRepository;
 
     public static void main(String[] args) {
         SpringApplication.run(HotelBackendApplication.class, args);
@@ -47,7 +51,7 @@ public class HotelBackendApplication {
                     .size(15L)
                     .build();
 
-            Category rockstarSuite = Category.builder()
+            Category rockStarSuite = Category.builder()
 //                    .Id(3L)
                     .categoryId(3L)
                     .name("Rockstar Suite Room")
@@ -70,17 +74,23 @@ public class HotelBackendApplication {
                             .category(superiorStreetView).build());
                 } else {
                     rockStarRooms.add(Room.builder()
-                            .category(rockstarSuite).build());
+                            .category(rockStarSuite).build());
                 }
 
                 counter++;
             }
+            luxury.setRoom(luxuryRooms);
+            superiorStreetView.setRoom(superiorRooms);
+            rockStarSuite.setRoom(rockStarRooms);
 
 
 
             categoryRepository.save(luxury);
             categoryRepository.save(superiorStreetView);
-            categoryRepository.save(rockstarSuite);
+            categoryRepository.save(rockStarSuite);
+            roomRepository.saveAll(luxuryRooms);
+            roomRepository.saveAll(superiorRooms);
+            roomRepository.saveAll(rockStarRooms);
         };
 
     }
