@@ -1,12 +1,9 @@
 package com.codecool.hotel_backend.controller;
 
 import com.codecool.hotel_backend.entity.Reservation;
-import com.codecool.hotel_backend.model.Room;
 import com.codecool.hotel_backend.repository.CategoryRepository;
 import com.codecool.hotel_backend.repository.ReservationRepository;
-import com.codecool.hotel_backend.service.RoomStorage;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.security.access.method.P;
 import org.springframework.web.bind.annotation.*;
 
 import java.time.LocalDate;
@@ -45,9 +42,11 @@ public class ReservationController {
         LocalDate startDate = LocalDate.parse(start);
         LocalDate endDate = LocalDate.parse(end);
 
-        return saveNewReservation(id, startDate, endDate);
+        if (checkIfCategoryAvailableInTimeFrameById(id, start, end)) {
+            return saveNewReservation(id, startDate, endDate);
+        }
+        return false;
     }
-
 
     private boolean saveNewReservation(Long categoryId, LocalDate startDate, LocalDate endDate) {
         Reservation reservation = Reservation.builder()
@@ -58,6 +57,5 @@ public class ReservationController {
 
         reservationRepository.saveAndFlush(reservation);
         return true;
-
     }
 }

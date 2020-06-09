@@ -2,9 +2,11 @@ package com.codecool.hotel_backend;
 
 import com.codecool.hotel_backend.entity.Category;
 import com.codecool.hotel_backend.entity.Reservation;
+import com.codecool.hotel_backend.entity.ReservedRoom;
 import com.codecool.hotel_backend.entity.Room;
 import com.codecool.hotel_backend.repository.CategoryRepository;
 import com.codecool.hotel_backend.repository.ReservationRepository;
+import com.codecool.hotel_backend.repository.ReservedRoomRepository;
 import com.codecool.hotel_backend.repository.RoomRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.CommandLineRunner;
@@ -28,6 +30,9 @@ public class HotelBackendApplication {
 
     @Autowired
     ReservationRepository reservationRepository;
+
+    @Autowired
+    ReservedRoomRepository reservedRoomRepository;
 
     public static void main(String[] args) {
         SpringApplication.run(HotelBackendApplication.class, args);
@@ -98,6 +103,13 @@ public class HotelBackendApplication {
             roomRepository.saveAll(luxuryRooms);
             roomRepository.saveAll(superiorRooms);
             roomRepository.saveAll(rockStarRooms);
+
+            ReservedRoom reservedRoom = ReservedRoom.builder()
+                    .room(luxuryRooms.get(0))
+                    .reservation(reservation)
+                    .build();
+
+            reservedRoomRepository.save(reservedRoom);
         };
 
     }
