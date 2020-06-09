@@ -32,7 +32,7 @@ public class HotelBackendApplication {
                     .size(25L)
                     .build();
 
-            Category SuperiorStreetView = Category.builder()
+            Category superiorStreetView = Category.builder()
                     .Id(2L)
                     .name("Superior Street View Room")
                     .capacity(2L)
@@ -41,7 +41,7 @@ public class HotelBackendApplication {
                     .size(15L)
                     .build();
 
-            Category RockstarSuite = Category.builder()
+            Category rockstarSuite = Category.builder()
                     .Id(3L)
                     .name("Rockstar Suite Room")
                     .capacity(4L)
@@ -51,8 +51,8 @@ public class HotelBackendApplication {
                     .build();
 
             categoryRepository.save(luxury);
-            categoryRepository.save(SuperiorStreetView);
-            categoryRepository.save(RockstarSuite);
+            categoryRepository.save(superiorStreetView);
+            categoryRepository.save(rockstarSuite);
         };
 
     }
