@@ -10,6 +10,7 @@ import org.springframework.security.access.method.P;
 import org.springframework.web.bind.annotation.*;
 
 import java.time.LocalDate;
+import java.util.List;
 
 @RestController
 public class ReservationController {
@@ -21,6 +22,19 @@ public class ReservationController {
     public ReservationController(CategoryRepository categoryRepository, ReservationRepository reservationRepository) {
         this.categoryRepository = categoryRepository;
         this.reservationRepository = reservationRepository;
+    }
+
+    @RequestMapping(value = "/category/available/{id}/{start}/{end}", method = RequestMethod.POST)
+    public boolean checkIfCategoryAvailableInTimeFrameById(@PathVariable("id") Long id,
+                                                           @PathVariable("start") String start,
+                                                           @PathVariable("end") String end) {
+        LocalDate startDate = LocalDate.parse(start);
+        LocalDate endDate = LocalDate.parse(end);
+
+        List<Reservation> allRoomsOfType = reservationRepository.getAllById(id);
+        List<Reservation> takenRooms = reservationRepository.getAvailableReservations(startDate, endDate);
+
+        return takenRooms.size() < allRoomsOfType.size();
     }
 
     @RequestMapping(value = "/category/reserve/{id}/{start}/{end}", method = RequestMethod.POST)
