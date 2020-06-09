@@ -1,8 +1,10 @@
 package com.codecool.hotel_backend;
 
 import com.codecool.hotel_backend.entity.Category;
+import com.codecool.hotel_backend.entity.Reservation;
 import com.codecool.hotel_backend.entity.Room;
 import com.codecool.hotel_backend.repository.CategoryRepository;
+import com.codecool.hotel_backend.repository.ReservationRepository;
 import com.codecool.hotel_backend.repository.RoomRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.CommandLineRunner;
@@ -11,6 +13,7 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Profile;
 
+import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -22,6 +25,9 @@ public class HotelBackendApplication {
 
     @Autowired
     RoomRepository roomRepository;
+
+    @Autowired
+    ReservationRepository reservationRepository;
 
     public static void main(String[] args) {
         SpringApplication.run(HotelBackendApplication.class, args);
@@ -79,6 +85,12 @@ public class HotelBackendApplication {
 
                 counter++;
             }
+            Reservation reservation = Reservation.builder()
+                    .category(luxury)
+                    .startDate(LocalDate.of(2020, 6, 10))
+                    .endDate(LocalDate.of(2020, 7, 20))
+                    .build();
+
             luxury.setRoom(luxuryRooms);
             superiorStreetView.setRoom(superiorRooms);
             rockStarSuite.setRoom(rockStarRooms);
