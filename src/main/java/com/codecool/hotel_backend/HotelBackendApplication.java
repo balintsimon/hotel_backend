@@ -1,6 +1,7 @@
 package com.codecool.hotel_backend;
 
 import com.codecool.hotel_backend.entity.Category;
+import com.codecool.hotel_backend.entity.Room;
 import com.codecool.hotel_backend.repository.CategoryRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.CommandLineRunner;
@@ -8,6 +9,9 @@ import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Profile;
+
+import java.util.ArrayList;
+import java.util.List;
 
 @SpringBootApplication
 public class HotelBackendApplication {
@@ -52,6 +56,25 @@ public class HotelBackendApplication {
                     .imgUrl("https://www.dertourluxury.hu/upload/pics/hotel/gallery/C__WebServ_Webs_Fundacion_folletos_download_742414550_HardRock%20HardRock%20RockstarSuite_Foyerk.jpg")
                     .size(20L)
                     .build();
+
+            List<Room> luxuryRooms = new ArrayList<>();
+            List<Room> superiorRooms = new ArrayList<>();
+            List<Room> rockStarRooms = new ArrayList<>();
+            int counter = 1;
+            while(counter <= 30) {
+                if (counter <= 10) {
+                    luxuryRooms.add(Room.builder()
+                            .category(luxury).build());
+                } else if (counter > 10 && counter <=20) {
+                    superiorRooms.add(Room.builder()
+                            .category(superiorStreetView).build());
+                } else {
+                    rockStarRooms.add(Room.builder()
+                            .category(rockstarSuite).build());
+                }
+
+                counter++;
+            }
 
 
 
