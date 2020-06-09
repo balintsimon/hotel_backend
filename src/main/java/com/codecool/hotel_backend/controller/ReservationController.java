@@ -1,5 +1,6 @@
 package com.codecool.hotel_backend.controller;
 
+import com.codecool.hotel_backend.entity.Reservation;
 import com.codecool.hotel_backend.model.Room;
 import com.codecool.hotel_backend.repository.CategoryRepository;
 import com.codecool.hotel_backend.repository.ReservationRepository;
@@ -22,20 +23,27 @@ public class ReservationController {
         this.reservationRepository = reservationRepository;
     }
 
-//    // TODO: switch to H2
-//    @RequestMapping(value = "/category/reserve/{id}", method = RequestMethod.POST)
-//    public Room reserveARoomByCategoryId(@PathVariable("id") int id) {
-//        return roomStorage.reserveARoom(id);
-//    }
-
     @RequestMapping(value = "/category/reserve/{id}/{start}/{end}", method = RequestMethod.POST)
     public boolean reserveACategoryById(@PathVariable("id") Long id,
                                         @PathVariable("start") String start,
                                         @PathVariable("end") String end) {
 
-        LocalDate startTime = LocalDate.parse(start);
-        LocalDate endTime = LocalDate.parse(end);
+        LocalDate startDate = LocalDate.parse(start);
+        LocalDate endDate = LocalDate.parse(end);
 
+        return saveNewReservation(id, startDate, endDate);
+    }
+
+
+    private boolean saveNewReservation(Long categoryId, LocalDate startDate, LocalDate endDate) {
+        Reservation reservation = Reservation.builder()
+                .category(categoryRepository.findCategoryById(categoryId))
+                .startDate(startDate)
+                .endDate(endDate)
+                .build();
+
+        reservationRepository.saveAndFlush(reservation);
         return true;
+
     }
 }

@@ -21,12 +21,6 @@ public interface ReservationRepository extends JpaRepository<Reservation, Long> 
 //    private LocalDate endDate;
 //    private ReservedRoom reservedRoom;
 
-//    @Query(value = "update Address a set a.country = 'USA' where a.id in " +
-//            "(select s.address.id from Student s where s.name LIKE :name)")
-//    @Modifying(clearAutomatically = true)
 
-
-//    @Query(value = "UPDATE Reservation r SET ")
-//    boolean enterNewReservation(Long id, LocalDate startTime, LocalDate endTime);
 
 }
