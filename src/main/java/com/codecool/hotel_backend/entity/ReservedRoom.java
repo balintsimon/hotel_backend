@@ -6,26 +6,20 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import javax.persistence.*;
-import java.time.LocalDate;
 
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
 @Entity
-public class Reservation {
-
+public class ReservedRoom {
     @Id
     @GeneratedValue
     private Long Id;
 
+    @OneToOne
+    private Reservation reservation;
+
     @ManyToOne
-    private Category category;
-
-    private LocalDate startDate;
-    private LocalDate endDate;
-
-    @OneToOne(cascade = {CascadeType.PERSIST, CascadeType.REMOVE})
-    private ReservedRoom reservedRoom;
-
+    private Room room;
 }

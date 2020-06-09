@@ -4,6 +4,7 @@ import com.codecool.hotel_backend.entity.Category;
 import lombok.*;
 
 import javax.persistence.*;
+import java.util.List;
 
 @Data
 @NoArgsConstructor
@@ -19,5 +20,7 @@ public class Room {
     @ManyToOne
     private Category category;
 
+    @OneToMany(mappedBy = "room", cascade = {CascadeType.PERSIST, CascadeType.REMOVE})
+    private List<ReservedRoom> reservedRoomList;
 
 }
