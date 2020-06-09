@@ -28,7 +28,7 @@ public class RoomController {
     }
 
     @GetMapping("/all")
-    public Room[] getAllRooms() {
+    public List<Room> getAllRooms() {
         return roomRepository.getRoomStorage();
     }
 
