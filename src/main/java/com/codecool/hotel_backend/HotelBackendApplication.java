@@ -38,8 +38,6 @@ public class HotelBackendApplication {
     public CommandLineRunner init() {
         return args -> {
             Category luxury = Category.builder()
-//                    .Id(1L)
-                    .categoryId(1L)
                     .name("Luxury Room")
                     .capacity(6L)
                     .description("These rooms provide you not only great views of the city but space to relax with your friends and family, while enjoying a special welcome amenity.")
@@ -48,8 +46,6 @@ public class HotelBackendApplication {
                     .build();
 
             Category superiorStreetView = Category.builder()
-//                    .Id(2L)
-                    .categoryId(2L)
                     .name("Superior Street View Room")
                     .capacity(2L)
                     .description("Take in all what Budapest has to offer while staying close to all the key acts in the city.")
@@ -58,8 +54,6 @@ public class HotelBackendApplication {
                     .build();
 
             Category rockStarSuite = Category.builder()
-//                    .Id(3L)
-                    .categoryId(3L)
                     .name("Rockstar Suite Room")
                     .capacity(4L)
                     .description("Our trademark Rock Star Suite is the perfect choice for the after party - minibar included. Have your crew over to chill or enjoy some great bites on your own terrace, then let good times flow in your own jacuzzi.")
