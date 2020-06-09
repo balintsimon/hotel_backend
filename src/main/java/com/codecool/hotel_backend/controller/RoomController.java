@@ -1,19 +1,14 @@
 package com.codecool.hotel_backend.controller;
 
 import com.codecool.hotel_backend.entity.Category;
-import com.codecool.hotel_backend.entity.Reservation;
-import com.codecool.hotel_backend.entity.ReservedRoom;
 import com.codecool.hotel_backend.entity.Room;
 import com.codecool.hotel_backend.repository.ReservationRepository;
 import com.codecool.hotel_backend.repository.ReservedRoomRepository;
 import com.codecool.hotel_backend.repository.RoomRepository;
-import com.codecool.hotel_backend.service.CategoryStorage;
-import com.codecool.hotel_backend.service.RoomStorage;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
 import java.time.LocalDate;
-import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -33,7 +28,7 @@ public class RoomController {
     }
 
     @GetMapping("/all")
-    public List<Room> getAllRoom() {
+    public Room[] getAllRooms() {
         return roomRepository.getRoomStorage();
     }
 

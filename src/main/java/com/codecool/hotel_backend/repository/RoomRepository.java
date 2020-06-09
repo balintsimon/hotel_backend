@@ -10,5 +10,5 @@ import java.util.List;
 public interface RoomRepository extends JpaRepository<Room, Long> {
 
     @Query(value = "SELECT r FROM Room r")
-    List<Room> getRoomStorage();
+    Room[] getRoomStorage();
 }
