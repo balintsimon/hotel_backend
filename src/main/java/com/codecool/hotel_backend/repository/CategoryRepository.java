@@ -9,10 +9,7 @@ import java.util.List;
 
 public interface CategoryRepository extends JpaRepository<Category, Long> {
 
-    Category findCategoryByCategoryId(Long categoryId);
-
-//    @Query(value = "SELECT DISTINCT c FROM Category c WHERE Category.categoryId = :id")
-//    Category getCategoryOnId(@Param("id") Long id);
+    Category findCategoryById(Long id);
 
     @Query(value = "SELECT c FROM Category c")
     List<Category> getCategoryStorage();

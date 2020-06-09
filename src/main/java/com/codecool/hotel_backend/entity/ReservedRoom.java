@@ -15,7 +15,7 @@ import javax.persistence.*;
 public class ReservedRoom {
     @Id
     @GeneratedValue
-    private Long Id;
+    private Long id;
 
     @OneToOne
     private Reservation reservation;

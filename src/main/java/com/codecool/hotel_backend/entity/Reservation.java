@@ -17,7 +17,7 @@ public class Reservation {
 
     @Id
     @GeneratedValue
-    private Long Id;
+    private Long id;
 
     @ManyToOne
     private Category category;

@@ -14,9 +14,7 @@ public class Category {
 
     @Id
     @GeneratedValue
-    private Long Id;
-
-    private Long categoryId;
+    private Long id;
 
     @OneToMany(mappedBy = "category", cascade = {CascadeType.PERSIST, CascadeType.REMOVE})
     @EqualsAndHashCode.Exclude

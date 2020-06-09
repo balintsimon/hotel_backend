@@ -23,7 +23,7 @@ public class CategoryController {
 
     @GetMapping("/{id}")
     public Category getAllByCategory(@PathVariable("id") Long id) {
-        return categoryRepository.findCategoryByCategoryId(id);
+        return categoryRepository.findCategoryById(id);
     }
 
     @GetMapping("/all")

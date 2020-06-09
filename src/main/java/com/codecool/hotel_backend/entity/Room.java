@@ -15,7 +15,7 @@ public class Room {
 
     @Id
     @GeneratedValue
-    private Long Id;
+    private Long id;
 
     @ManyToOne
     private Category category;
