@@ -25,4 +25,8 @@ public class Category {
     private String description;
     private Long capacity;
     private String imgUrl;
+
+    @OneToMany(mappedBy = "category", cascade = {CascadeType.PERSIST, CascadeType.REMOVE})
+    @EqualsAndHashCode.Exclude
+    private List<Reservation> reservation;
 }

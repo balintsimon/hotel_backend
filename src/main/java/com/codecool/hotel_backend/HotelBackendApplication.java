@@ -50,6 +50,8 @@ public class HotelBackendApplication {
                     .size(20L)
                     .build();
 
+
+
             categoryRepository.save(luxury);
             categoryRepository.save(superiorStreetView);
             categoryRepository.save(rockstarSuite);

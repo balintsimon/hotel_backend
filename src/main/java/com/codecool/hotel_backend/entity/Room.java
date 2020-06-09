@@ -19,7 +19,5 @@ public class Room {
     @ManyToOne
     private Category category;
 
-    private boolean isOccupied;
-
 
 }
