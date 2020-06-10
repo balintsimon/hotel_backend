@@ -24,6 +24,8 @@ public interface ReservationRepository extends JpaRepository<Reservation, Long> 
     )
     List<Reservation> getAvailableReservations(@Param("startDate") LocalDate startDate, @Param("endDate") LocalDate endDate);
 
+    List<Reservation> findAll();
+
     @Query(value = "SELECT room FROM Room room" +
             " WHERE room.id NOT IN" +
             " (SELECT rr FROM ReservedRoom rr WHERE rr.id NOT IN" +

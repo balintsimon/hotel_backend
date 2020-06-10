@@ -1,5 +1,6 @@
 package com.codecool.hotel_backend.entity;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.*;
 
 import javax.persistence.*;
@@ -23,6 +24,9 @@ public class Reservation {
     private LocalDate endDate;
 
 
+    @ToString.Exclude
+    @EqualsAndHashCode.Exclude
+    @JsonIgnore
     @OneToOne(mappedBy = "reservation", cascade = {CascadeType.PERSIST, CascadeType.REMOVE})
     private ReservedRoom reservedRoom;
 
