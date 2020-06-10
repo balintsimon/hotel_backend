@@ -60,6 +60,23 @@ public class RoomOrganiser {
         return availableRooms;
     }
 
+    public boolean reserveRoom(Long categoryId, String start, String end) {
+        List<Room> availableRooms = getAvailableRoomsInCategory(start, end, categoryId);
+        LocalDate startDate = organiserUtils.convertStringToLocalDate(start);
+        LocalDate endDate = organiserUtils.convertStringToLocalDate(end);
+
+        if (availableRooms != null) {
+            Reservation reservation = Reservation.builder()
+                    .category(categoryRepository.findCategoryById(categoryId))
+                    .startDate(startDate)
+                    .endDate(endDate)
+                    .build();
+            reservationRepository.saveAndFlush(reservation);
+            return true;
+        }
+        return false;
+    }
+
     public List<Room> getAvailableRoomsInCategory(String start, String end, Long categoryId) {
         LocalDate startDate = organiserUtils.convertStringToLocalDate(start);
         LocalDate endDate = organiserUtils.convertStringToLocalDate(end);

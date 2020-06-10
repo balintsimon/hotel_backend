@@ -45,6 +45,13 @@ public class ReservationController {
         return null;
     }
 
+    @RequestMapping(value = "/category/reserve/{category_id}/{start}/{end}", method = RequestMethod.POST)
+    public boolean reserveRoom(@PathVariable("category_id") Long id,
+                               @PathVariable("start") String start,
+                               @PathVariable("end") String end) {
+        return roomOrganiser.reserveRoom(id, start, end);
+    }
+
 
 //    @RequestMapping(value = "/category/available/{id}/{start}/{end}", method = RequestMethod.POST)
 //    public boolean checkIfCategoryAvailableInTimeFrameById(@PathVariable("id") Long id,
@@ -72,15 +79,4 @@ public class ReservationController {
 //        }
 //        return false;
 //    }
-
-    private boolean saveNewReservation(Long categoryId, LocalDate startDate, LocalDate endDate) {
-        Reservation reservation = Reservation.builder()
-                .category(categoryRepository.findCategoryById(categoryId))
-                .startDate(startDate)
-                .endDate(endDate)
-                .build();
-
-        reservationRepository.saveAndFlush(reservation);
-        return true;
-    }
 }
