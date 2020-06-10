@@ -4,7 +4,7 @@ import com.codecool.hotel_backend.entity.Reservation;
 import com.codecool.hotel_backend.entity.Room;
 import com.codecool.hotel_backend.repository.CategoryRepository;
 import com.codecool.hotel_backend.repository.ReservationRepository;
-import com.codecool.hotel_backend.service.RoomOrganizer;
+import com.codecool.hotel_backend.service.RoomOrganiser;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
@@ -25,13 +25,13 @@ public class ReservationController {
     }
 
     @Autowired
-    RoomOrganizer roomOrganizer;
+    RoomOrganiser roomOrganiser;
 
 
     @RequestMapping(value = "/test/{start}/{end}", method = RequestMethod.GET)
     public List<Room> getAvailableRooms(                   @PathVariable("start") String start,
                                                            @PathVariable("end") String end) {
-        roomOrganizer.getAvailableRooms(start, end);
+        roomOrganiser.getAvailableRooms(start, end);
 
         return null;
     }
@@ -40,7 +40,7 @@ public class ReservationController {
     public List<Room> getAvailableRooms(@PathVariable("id") Long id,
                                         @PathVariable("start") String start,
                                         @PathVariable("end") String end) {
-        roomOrganizer.getAvailableRoomsInCategory(start, end, id);
+        roomOrganiser.getAvailableRoomsInCategory(start, end, id);
 
         return null;
     }
