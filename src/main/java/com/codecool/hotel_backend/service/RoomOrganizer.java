@@ -86,6 +86,24 @@ public class RoomOrganizer {
         return availableRooms;
     }
 
+    // This is the top layer of the logic, that reserves a room after many checks
+    public boolean reserveRoom(Long categoryId, String start, String end) {
+        List<Room> availableRooms = getAvailableRoomsInCategory(start, end, categoryId);
+        LocalDate startDate = convertStringToLocalDate(start);
+        LocalDate endDate = convertStringToLocalDate(end);
+
+        if (availableRooms != null) {
+            Reservation reservation = Reservation.builder()
+                    .category(categoryRepository.findCategoryById(categoryId))
+                    .startDate(startDate)
+                    .endDate(endDate)
+                    .build();
+            reservationRepository.saveAndFlush(reservation);
+            return true;
+        }
+        return false;
+    }
+
     private List<Room> getRoomsFromReservedRooms(List<ReservedRoom> reservedRooms) {
         List<Room> rooms = new ArrayList<>();
         for (ReservedRoom actualReservedRoom : reservedRooms) {
