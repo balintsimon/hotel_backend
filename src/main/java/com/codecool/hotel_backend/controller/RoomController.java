@@ -38,10 +38,10 @@ public class RoomController {
         return reservationRepository.getAllAvailableRoomsInTimeFrame(LocalDate.parse(start), LocalDate.parse(end));
     }
 
-    @GetMapping("/available-number-of-available-categories/{start}/{end}")
+    @GetMapping("/available-number-of-available-rooms/{start}/{end}")
     public int getNumberOfAllAvailableRoomsInTimeFrame(@PathVariable("start") String start,
                                                        @PathVariable("end") String end) {
-        return reservationRepository.getNumberOfAvailableRoomsByCategoryInTimeFrame(LocalDate.parse(start), LocalDate.parse(end));
+        return reservationRepository.getNumberOfAvailableRoomsInTimeFrame(LocalDate.parse(start), LocalDate.parse(end));
     }
 
     @GetMapping("/numberOfAvailableRoomsByCategory/{start}/{end}")

@@ -44,12 +44,12 @@ public interface ReservationRepository extends JpaRepository<Reservation, Long> 
 
     @Query(value = "SELECT COUNT(room) FROM Room room" +
             " WHERE room.id NOT IN" +
-            " (SELECT rr FROM ReservedRoom rr WHERE rr.id NOT IN" +
-            " (SELECT res FROM Reservation res WHERE" +
+            " (SELECT rr.room.id FROM ReservedRoom rr WHERE rr.id NOT IN" +
+            " (SELECT res.reservedRoom.id FROM Reservation res WHERE" +
             " (:startDate BETWEEN res.startDate AND res.endDate" +
             " AND :endDate BETWEEN res.startDate AND res.endDate) OR" +
-            " :startDate < res.startDate AND :endDate > res.endDate) )")
-    int getNumberOfAvailableRoomsByCategoryInTimeFrame(@Param("startDate") LocalDate startDate, @Param("endDate") LocalDate endDate);
+            " :startDate <= res.startDate AND :endDate >= res.endDate) )")
+    int getNumberOfAvailableRoomsInTimeFrame(@Param("startDate") LocalDate startDate, @Param("endDate") LocalDate endDate);
 
     @Query(value = "SELECT COUNT(room) FROM Room room" +
             " WHERE room.id NOT IN" +
