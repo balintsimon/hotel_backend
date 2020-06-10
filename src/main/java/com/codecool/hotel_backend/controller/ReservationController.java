@@ -28,7 +28,7 @@ public class ReservationController {
     RoomOrganizer roomOrganizer;
 
 
-    @RequestMapping(value = "/category/available/testCat/{start}/{end}", method = RequestMethod.POST)
+    @RequestMapping(value = "/test/{start}/{end}", method = RequestMethod.GET)
     public List<Room> getAvailableRooms(                   @PathVariable("start") String start,
                                                            @PathVariable("end") String end) {
         roomOrganizer.getAvailableRooms(start, end);
@@ -36,6 +36,14 @@ public class ReservationController {
         return null;
     }
 
+    @RequestMapping(value = "/test/{start}/{end}/{id}", method = RequestMethod.GET)
+    public List<Room> getAvailableRooms(@PathVariable("id") Long id,
+                                        @PathVariable("start") String start,
+                                        @PathVariable("end") String end) {
+        roomOrganizer.getAvailableRoomsInCategory(start, end, id);
+
+        return null;
+    }
 
 
 //    @RequestMapping(value = "/category/available/{id}/{start}/{end}", method = RequestMethod.POST)

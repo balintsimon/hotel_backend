@@ -17,4 +17,6 @@ public interface RoomRepository extends JpaRepository<Room, Long> {
     List<Room> getRoomStorage();
 
     List<Room> findAll();
+
+    List<Room> findAllByCategory_Id(Long id);
 }
