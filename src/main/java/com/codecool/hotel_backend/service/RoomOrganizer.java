@@ -41,8 +41,9 @@ public class RoomOrganizer {
         } catch (DateTimeParseException e) {
             e.printStackTrace();
         }
+
+        // 1. Get reservations
         List<Reservation> reservations = reservationRepository.findAll();
-//        System.out.println(reservations);
 
         List<Reservation> foundReservations = new ArrayList<>();
          for (Reservation reservation : reservations) {
@@ -63,11 +64,14 @@ public class RoomOrganizer {
             System.out.println(foundreservation.toString());
         }
 
+        // 2. Get reserved rooms
         List<ReservedRoom> allReservedRooms = reservedRoomRepository.findAll();
         List<ReservedRoom> allFoundReservedRooms = new ArrayList<>();
+        List<Room> allFoundRooms = new ArrayList<>();
         for (ReservedRoom actualReservedRoom : allReservedRooms) {
             if (foundReservations.contains(actualReservedRoom.getReservation())) {
                 allFoundReservedRooms.add(actualReservedRoom);
+                allFoundRooms.add(actualReservedRoom.getRoom());
             }
         }
 
@@ -75,16 +79,28 @@ public class RoomOrganizer {
         for (ReservedRoom foundreservation : allFoundReservedRooms) {
             System.out.println(foundreservation.toString());
         }
+
+        // 3. Get all rooms
+        List<Room> allRooms = roomRepository.findAll();
+        List<Room> availableRooms = new ArrayList<>();
+        List<Room> takenRooms = new ArrayList<>();
+
+        for (Room actualRoom : allRooms) {
+            if (allFoundRooms.contains(actualRoom)) {
+                takenRooms.add(actualRoom);
+            } else {
+                availableRooms.add(actualRoom);
+            }
+        }
+
+        System.out.println("Found the following rooms are taken in the time frame:");
+        for (Room room : takenRooms) {
+            System.out.println(room.toString());
+        }
+        System.out.println(availableRooms.size() + " number of rooms are available");
+        System.out.println(takenRooms.size() + " number of rooms are taken");
         System.out.println("==================================");
-
-//        List<Room> allRooms = roomRepository.findAll();
-//        List<Room> availableRooms = new ArrayList<>();
-//        for (Room actualRoom : allRooms) {
-//
-//        }
-
-
-        return null;
+        return availableRooms;
     }
 
 }
