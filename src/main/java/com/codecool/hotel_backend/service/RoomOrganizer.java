@@ -49,12 +49,17 @@ public class RoomOrganizer {
             assert startDate != null;
             assert endDate != null;
             if ((startDate.isBefore(reservation.getEndDate()) && startDate.isAfter(reservation.getStartDate()))
+                    || (startDate.isEqual(reservation.getStartDate()) || startDate.isEqual(reservation.getEndDate()))
                 || (endDate.isBefore(reservation.getEndDate()) && endDate.isAfter(reservation.getStartDate()))
+                    || (endDate.isEqual(reservation.getStartDate()) || endDate.isEqual(reservation.getEndDate()))
                 || (startDate.isBefore(reservation.getStartDate()) && endDate.isAfter(reservation.getEndDate()))
             ) {
                 foundReservations.add(reservation);
             }
         }
+
+
+
         System.out.println("==================================");
         for (Reservation foundreservation : foundReservations) {
             System.out.println(foundreservation.toString());
