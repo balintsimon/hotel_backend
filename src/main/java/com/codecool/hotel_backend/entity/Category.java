@@ -1,5 +1,8 @@
 package com.codecool.hotel_backend.entity;
 
+import com.fasterxml.jackson.annotation.JsonIdentityInfo;
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.ObjectIdGenerators;
 import lombok.*;
 
 import javax.persistence.*;
@@ -16,8 +19,10 @@ public class Category {
     @GeneratedValue
     private Long id;
 
-    @OneToMany(mappedBy = "category", cascade = {CascadeType.PERSIST, CascadeType.REMOVE})
+    @ToString.Exclude
     @EqualsAndHashCode.Exclude
+    @JsonIgnore
+    @OneToMany(fetch = FetchType.LAZY, mappedBy = "category", cascade = {CascadeType.PERSIST, CascadeType.REMOVE})
     private List<Room> room;
 
     private Long size; // size as in square meters
@@ -26,7 +31,9 @@ public class Category {
     private Long capacity;
     private String imgUrl;
 
-    @OneToMany(mappedBy = "category", cascade = {CascadeType.PERSIST, CascadeType.REMOVE})
+    @ToString.Exclude
     @EqualsAndHashCode.Exclude
+    @JsonIgnore
+    @OneToMany(fetch = FetchType.LAZY, mappedBy = "category", cascade = {CascadeType.PERSIST, CascadeType.REMOVE})
     private List<Reservation> reservation;
 }

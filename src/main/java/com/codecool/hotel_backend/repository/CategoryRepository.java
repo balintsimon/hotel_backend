@@ -16,6 +16,6 @@ public interface CategoryRepository extends JpaRepository<Category, Long> {
 //    @Query(value = "SELECT c FROM Category AS c")
 //    List<Category> getCategoryStorage();
 
-    @Query(value = "SELECT DISTINCT c.id, c.room, c.size, c.name, c.description, c.capacity, c.imgUrl, c.reservation FROM Category AS c")
+    @Query(value = "SELECT c FROM Category c")
     List<Category> getCategoryStorage();
 }

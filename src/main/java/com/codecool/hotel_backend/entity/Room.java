@@ -1,6 +1,7 @@
 package com.codecool.hotel_backend.entity;
 
 import com.codecool.hotel_backend.entity.Category;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.*;
 
 import javax.persistence.*;
@@ -20,7 +21,10 @@ public class Room {
     @ManyToOne
     private Category category;
 
-    @OneToMany(mappedBy = "room", cascade = {CascadeType.PERSIST, CascadeType.REMOVE})
+    @EqualsAndHashCode.Exclude
+    @ToString.Exclude
+    @JsonIgnore
+    @OneToMany(fetch = FetchType.LAZY, mappedBy = "room", cascade = {CascadeType.PERSIST, CascadeType.REMOVE})
     private List<ReservedRoom> reservedRoomList;
 
 }

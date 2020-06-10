@@ -24,7 +24,6 @@ public class Reservation {
 
 
     @OneToOne(mappedBy = "reservation", cascade = {CascadeType.PERSIST, CascadeType.REMOVE})
-    @EqualsAndHashCode.Exclude
     private ReservedRoom reservedRoom;
 
 }
