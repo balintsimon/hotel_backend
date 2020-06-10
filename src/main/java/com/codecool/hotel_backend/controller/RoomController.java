@@ -5,6 +5,7 @@ import com.codecool.hotel_backend.entity.Room;
 import com.codecool.hotel_backend.repository.ReservationRepository;
 import com.codecool.hotel_backend.repository.ReservedRoomRepository;
 import com.codecool.hotel_backend.repository.RoomRepository;
+import com.codecool.hotel_backend.service.RoomOrganiser;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
@@ -16,27 +17,51 @@ import java.util.Map;
 //@CrossOrigin(origins = {"http://localhost:8080"})
 @RequestMapping("/room")
 public class RoomController {
-    RoomRepository roomRepository;
-    ReservationRepository reservationRepository;
-    ReservedRoomRepository reservedRoomRepository;
+    private RoomRepository roomRepository;
+    private ReservationRepository reservationRepository;
+    private ReservedRoomRepository reservedRoomRepository;
+    private RoomOrganiser roomOrganiser;
 
     @Autowired
-    public RoomController(RoomRepository roomRepository, ReservedRoomRepository reservedRoomRepository, ReservationRepository reservationRepository) {
+    public RoomController(RoomRepository roomRepository, ReservedRoomRepository reservedRoomRepository, ReservationRepository reservationRepository, RoomOrganiser roomOrganiser) {
         this.roomRepository = roomRepository;
         this.reservedRoomRepository = reservedRoomRepository;
         this.reservationRepository = reservationRepository;
+        this.roomOrganiser = roomOrganiser;
     }
 
     @GetMapping("/all")
     public List<Room> getAllRooms() {
-        return roomRepository.getRoomStorage();
+        return roomRepository.findAll();
     }
 
-    @GetMapping("/all-available-rooms/{start}/{end}")
+    @GetMapping("/all-available/{start}/{end}")
     public List<Room> getAllAvailableRoomsInTimeFrame(@PathVariable("start") String start,
                                                       @PathVariable("end") String end) {
-        return reservationRepository.getAllAvailableRoomsInTimeFrame(LocalDate.parse(start), LocalDate.parse(end));
+        return roomOrganiser.getAvailableRooms(start, end);
     }
+
+    @GetMapping("/all-taken/{start}/{end}")
+    public List<Room> getAllTakenRoomsInTimeFrame(@PathVariable("start") String start,
+                                                      @PathVariable("end") String end) {
+        return roomOrganiser.getTakenRooms(start, end);
+    }
+
+    @GetMapping("/all-available-category/{start}/{end}/{id}")
+    public List<Room> getAllAvailableRoomsInTimeFrameInCategory(@PathVariable("id") Long id,
+                                                                @PathVariable("start") String start,
+                                                      @PathVariable("end") String end) {
+        return roomOrganiser.getAvailableRoomsInCategory(start, end, id);
+    }
+
+    @GetMapping("/all-taken-category/{start}/{end}/{id}")
+    public List<Room> getAllTakenRoomsInTimeFrameInCategory(@PathVariable("id") Long id,
+                                                            @PathVariable("start") String start,
+                                                      @PathVariable("end") String end) {
+        return roomOrganiser.getTakenRoomsInCategory(start, end, id);
+    }
+
+
 
     @GetMapping("/available-number-of-available-rooms/{start}/{end}")
     public int getNumberOfAllAvailableRoomsInTimeFrame(@PathVariable("start") String start,
