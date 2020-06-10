@@ -11,6 +11,7 @@ import org.springframework.stereotype.Component;
 
 import java.time.LocalDate;
 import java.time.format.DateTimeParseException;
+import java.util.ArrayList;
 import java.util.List;
 
 @Component
@@ -24,8 +25,8 @@ public class RoomOrganizer {
     }
 
     public List<Room> getAvailableRooms(String start, String end) {
-        LocalDate startDate;
-        LocalDate endDate;
+        LocalDate startDate = null;
+        LocalDate endDate = null;
         try {
             startDate = LocalDate.parse(start);
             endDate = LocalDate.parse(end);
@@ -35,9 +36,16 @@ public class RoomOrganizer {
         List<Reservation> reservations = reservationRepository.findAll();
 //        System.out.println(reservations);
 
+        List<Reservation> foundReservations = new ArrayList<>();
         for (Reservation reservation : reservations) {
-
+            assert startDate != null;
+            assert endDate != null;
+            if (startDate.isBefore(reservation.getEndDate()) && startDate.isAfter(reservation.getStartDate())
+                && endDate.isBefore(reservation.getEndDate()) && endDate.isAfter(reservation.getStartDate())) {
+                foundReservations.add(reservation);
+            }
         }
+        System.out.println(foundReservations);
 
 
         return null;
