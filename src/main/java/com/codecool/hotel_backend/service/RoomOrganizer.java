@@ -48,12 +48,18 @@ public class RoomOrganizer {
         for (Reservation reservation : reservations) {
             assert startDate != null;
             assert endDate != null;
-            if (startDate.isBefore(reservation.getEndDate()) && startDate.isAfter(reservation.getStartDate())
-                && endDate.isBefore(reservation.getEndDate()) && endDate.isAfter(reservation.getStartDate())) {
+            if ((startDate.isBefore(reservation.getEndDate()) && startDate.isAfter(reservation.getStartDate()))
+                || (endDate.isBefore(reservation.getEndDate()) && endDate.isAfter(reservation.getStartDate()))
+                || (startDate.isBefore(reservation.getStartDate()) && endDate.isAfter(reservation.getEndDate()))
+            ) {
                 foundReservations.add(reservation);
             }
         }
-        System.out.println(foundReservations);
+        System.out.println("==================================");
+        for (Reservation foundreservation : foundReservations) {
+            System.out.println(foundreservation.toString());
+        }
+//        System.out.println(foundReservations);
 
 
         return null;
