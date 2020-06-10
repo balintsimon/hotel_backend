@@ -1,14 +1,14 @@
 package com.codecool.hotel_backend.controller;
 
 import com.codecool.hotel_backend.entity.Reservation;
-import com.codecool.hotel_backend.entity.Room;
+import com.codecool.hotel_backend.entity.ReservedRoom;
 import com.codecool.hotel_backend.repository.CategoryRepository;
 import com.codecool.hotel_backend.repository.ReservationRepository;
-import com.codecool.hotel_backend.service.RoomOrganizer;
+import com.codecool.hotel_backend.repository.ReservedRoomRepository;
+import com.codecool.hotel_backend.service.RoomOrganiser;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
-import java.time.LocalDate;
 import java.util.List;
 
 
@@ -17,62 +17,39 @@ public class ReservationController {
 
     ReservationRepository reservationRepository;
     CategoryRepository categoryRepository;
+    RoomOrganiser roomOrganiser;
+    ReservedRoomRepository reservedRoomRepository;
 
     @Autowired
-    public ReservationController(CategoryRepository categoryRepository, ReservationRepository reservationRepository) {
+    public ReservationController(CategoryRepository categoryRepository, ReservationRepository reservationRepository,
+                                 RoomOrganiser roomOrganiser, ReservedRoomRepository reservedRoomRepository) {
         this.categoryRepository = categoryRepository;
         this.reservationRepository = reservationRepository;
+        this.roomOrganiser = roomOrganiser;
+        this.reservedRoomRepository = reservedRoomRepository;
     }
 
-    @Autowired
-    RoomOrganizer roomOrganizer;
+    @RequestMapping(value = "/get-all-reservations")
+    public List<Reservation> getAllReservations() {
+        return roomOrganiser.getAllReservations();
+    }
 
+    @RequestMapping(value = "/get-all-reserved-rooms")
+    public List<ReservedRoom> getAllReservedRooms() {
+        return reservedRoomRepository.findAll();
+    }
 
-    @RequestMapping(value = "/category/available/testCat/{start}/{end}", method = RequestMethod.POST)
-    public List<Room> getAvailableRooms(                   @PathVariable("start") String start,
+    @RequestMapping(value = "/category/reserve/{category_id}/{start}/{end}", method = RequestMethod.POST)
+    public boolean reserveRoom(@PathVariable("category_id") Long id,
+                               @PathVariable("start") String start,
+                               @PathVariable("end") String end) {
+        return roomOrganiser.reserveRoom(id, start, end);
+    }
+
+    @RequestMapping(value = "/category/available/{id}/{start}/{end}", method = RequestMethod.POST)
+    public boolean checkIfCategoryAvailableInTimeFrameById(@PathVariable("id") Long id,
+                                                           @PathVariable("start") String start,
                                                            @PathVariable("end") String end) {
-        roomOrganizer.getAvailableRooms(start, end);
-
-        return null;
-    }
-
-
-
-//    @RequestMapping(value = "/category/available/{id}/{start}/{end}", method = RequestMethod.POST)
-//    public boolean checkIfCategoryAvailableInTimeFrameById(@PathVariable("id") Long id,
-//                                                           @PathVariable("start") String start,
-//                                                           @PathVariable("end") String end) {
-//        LocalDate startDate = LocalDate.parse(start);
-//        LocalDate endDate = LocalDate.parse(end);
-//
-//        List<Reservation> allRoomsOfType = reservationRepository.getAllById(id);
-//        List<Reservation> takenRooms = reservationRepository.getAvailableReservations(startDate, endDate);
-//
-//        return takenRooms.size() < allRoomsOfType.size();
-//    }
-
-//    @RequestMapping(value = "/category/reserve/{id}/{start}/{end}", method = RequestMethod.POST)
-//    public boolean reserveACategoryById(@PathVariable("id") Long id,
-//                                        @PathVariable("start") String start,
-//                                        @PathVariable("end") String end) {
-//
-//        LocalDate startDate = LocalDate.parse(start);
-//        LocalDate endDate = LocalDate.parse(end);
-//
-//        if (checkIfCategoryAvailableInTimeFrameById(id, start, end)) {
-//            return saveNewReservation(id, startDate, endDate);
-//        }
-//        return false;
-//    }
-
-    private boolean saveNewReservation(Long categoryId, LocalDate startDate, LocalDate endDate) {
-        Reservation reservation = Reservation.builder()
-                .category(categoryRepository.findCategoryById(categoryId))
-                .startDate(startDate)
-                .endDate(endDate)
-                .build();
-
-        reservationRepository.saveAndFlush(reservation);
-        return true;
+        return roomOrganiser.getAvailableRoomsInCategory(start, end, id).size() > 0;
     }
 }

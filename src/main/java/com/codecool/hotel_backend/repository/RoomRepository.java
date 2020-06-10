@@ -15,4 +15,8 @@ public interface RoomRepository extends JpaRepository<Room, Long> {
 //    Room[] getRoomStorage();
     @Query(value = "SELECT r.id, r.category, r.reservedRoomList FROM Room r")
     List<Room> getRoomStorage();
+
+    List<Room> findAll();
+
+    List<Room> findAllByCategory_Id(Long id);
 }
