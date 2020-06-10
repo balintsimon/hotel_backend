@@ -45,7 +45,7 @@ public class RoomOrganizer {
 //        System.out.println(reservations);
 
         List<Reservation> foundReservations = new ArrayList<>();
-        for (Reservation reservation : reservations) {
+         for (Reservation reservation : reservations) {
             assert startDate != null;
             assert endDate != null;
             if ((startDate.isBefore(reservation.getEndDate()) && startDate.isAfter(reservation.getStartDate()))
@@ -57,14 +57,31 @@ public class RoomOrganizer {
                 foundReservations.add(reservation);
             }
         }
-
-
-
         System.out.println("==================================");
+        System.out.println("Found the following reservations in the time frame:");
         for (Reservation foundreservation : foundReservations) {
             System.out.println(foundreservation.toString());
         }
-//        System.out.println(foundReservations);
+
+        List<ReservedRoom> allReservedRooms = reservedRoomRepository.findAll();
+        List<ReservedRoom> allFoundReservedRooms = new ArrayList<>();
+        for (ReservedRoom actualReservedRoom : allReservedRooms) {
+            if (foundReservations.contains(actualReservedRoom.getReservation())) {
+                allFoundReservedRooms.add(actualReservedRoom);
+            }
+        }
+
+        System.out.println("Found the following reserved rooms in the time frame:");
+        for (ReservedRoom foundreservation : allFoundReservedRooms) {
+            System.out.println(foundreservation.toString());
+        }
+        System.out.println("==================================");
+
+//        List<Room> allRooms = roomRepository.findAll();
+//        List<Room> availableRooms = new ArrayList<>();
+//        for (Room actualRoom : allRooms) {
+//
+//        }
 
 
         return null;
