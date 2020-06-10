@@ -36,7 +36,7 @@ public class ReservationController {
         return roomOrganiser.getAllReservations();
     }
 
-    @RequestMapping(value = "/get-all-reserved-room-repo")
+    @RequestMapping(value = "/get-all-reserved-rooms")
     public List<ReservedRoom> getAllReservedRooms() {
         return reservedRoomRepository.findAll();
     }
