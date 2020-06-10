@@ -89,6 +89,13 @@ public class HotelBackendApplication {
                     .startDate(LocalDate.of(2020, 6, 10))
                     .endDate(LocalDate.of(2020, 7, 20))
                     .build();
+            Reservation reservation2 = Reservation.builder()
+                    .category(rockStarSuite)
+                    .startDate(LocalDate.of(2020, 6, 15))
+                    .endDate(LocalDate.of(2020, 7, 25))
+                    .build();
+
+
 
             luxury.setRoom(luxuryRooms);
             superiorStreetView.setRoom(superiorRooms);
@@ -100,6 +107,7 @@ public class HotelBackendApplication {
             categoryRepository.save(superiorStreetView);
             categoryRepository.save(rockStarSuite);
             reservationRepository.save(reservation);
+            reservationRepository.save(reservation2);
             roomRepository.saveAll(luxuryRooms);
             roomRepository.saveAll(superiorRooms);
             roomRepository.saveAll(rockStarRooms);
@@ -108,6 +116,8 @@ public class HotelBackendApplication {
                     .room(luxuryRooms.get(0))
                     .reservation(reservation)
                     .build();
+
+
 
             reservedRoomRepository.save(reservedRoom);
         };
