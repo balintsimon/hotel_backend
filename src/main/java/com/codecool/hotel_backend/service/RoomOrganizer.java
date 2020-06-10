@@ -1,11 +1,13 @@
 package com.codecool.hotel_backend.service;
 
 import com.codecool.hotel_backend.entity.Reservation;
+import com.codecool.hotel_backend.entity.ReservedRoom;
 import com.codecool.hotel_backend.entity.Room;
 import com.codecool.hotel_backend.repository.CategoryRepository;
 import com.codecool.hotel_backend.repository.ReservationRepository;
 import com.codecool.hotel_backend.repository.ReservedRoomRepository;
 import com.codecool.hotel_backend.repository.RoomRepository;
+import net.bytebuddy.asm.Advice;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
@@ -17,11 +19,17 @@ import java.util.List;
 @Component
 public class RoomOrganizer {
 
+    private CategoryRepository categoryRepository;
     private ReservationRepository reservationRepository;
+    private ReservedRoomRepository reservedRoomRepository;
+    private RoomRepository roomRepository;
 
     @Autowired
-    public RoomOrganizer(ReservationRepository reservationRepository) {
+    public RoomOrganizer(CategoryRepository categoryRepository, ReservationRepository reservationRepository, ReservedRoomRepository reservedRoomRepository, RoomRepository roomRepository) {
+        this.categoryRepository = categoryRepository;
         this.reservationRepository = reservationRepository;
+        this.reservedRoomRepository = reservedRoomRepository;
+        this.roomRepository = roomRepository;
     }
 
     public List<Room> getAvailableRooms(String start, String end) {
