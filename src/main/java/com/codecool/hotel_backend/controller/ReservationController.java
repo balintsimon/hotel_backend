@@ -49,7 +49,7 @@ public class ReservationController {
     public boolean reserveRoom(@PathVariable("category_id") Long id,
                                @PathVariable("start") String start,
                                @PathVariable("end") String end) {
-        return roomOrganizer.reserveRoom(id, start, end);
+        return roomOrganiser.reserveRoom(id, start, end);
     }
 
 
