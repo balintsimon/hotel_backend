@@ -17,32 +17,18 @@ public class ReservationController {
 
     ReservationRepository reservationRepository;
     CategoryRepository categoryRepository;
-
-    @Autowired
-    public ReservationController(CategoryRepository categoryRepository, ReservationRepository reservationRepository) {
-        this.categoryRepository = categoryRepository;
-        this.reservationRepository = reservationRepository;
-    }
-
-    @Autowired
     RoomOrganiser roomOrganiser;
 
-
-    @RequestMapping(value = "/test/{start}/{end}", method = RequestMethod.GET)
-    public List<Room> getAvailableRooms(                   @PathVariable("start") String start,
-                                                           @PathVariable("end") String end) {
-        roomOrganiser.getAvailableRooms(start, end);
-
-        return null;
+    @Autowired
+    public ReservationController(CategoryRepository categoryRepository, ReservationRepository reservationRepository, RoomOrganiser roomOrganiser) {
+        this.categoryRepository = categoryRepository;
+        this.reservationRepository = reservationRepository;
+        this.roomOrganiser = roomOrganiser;
     }
 
-    @RequestMapping(value = "/test/{start}/{end}/{id}", method = RequestMethod.GET)
-    public List<Room> getAvailableRooms(@PathVariable("id") Long id,
-                                        @PathVariable("start") String start,
-                                        @PathVariable("end") String end) {
-        roomOrganiser.getAvailableRoomsInCategory(start, end, id);
-
-        return null;
+    @RequestMapping(value = "/get-all-reservations")
+    public List<Reservation> getAllReservations() {
+        return roomOrganiser.getAllReservations();
     }
 
     @RequestMapping(value = "/category/reserve/{category_id}/{start}/{end}", method = RequestMethod.POST)

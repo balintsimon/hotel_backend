@@ -160,5 +160,7 @@ public class RoomOrganiser {
     }
 
 
-
+    public List<Reservation> getAllReservations() {
+        return reservationRepository.findAll();
+    }
 }
