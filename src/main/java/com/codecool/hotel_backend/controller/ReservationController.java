@@ -1,9 +1,11 @@
 package com.codecool.hotel_backend.controller;
 
 import com.codecool.hotel_backend.entity.Reservation;
+import com.codecool.hotel_backend.entity.ReservedRoom;
 import com.codecool.hotel_backend.entity.Room;
 import com.codecool.hotel_backend.repository.CategoryRepository;
 import com.codecool.hotel_backend.repository.ReservationRepository;
+import com.codecool.hotel_backend.repository.ReservedRoomRepository;
 import com.codecool.hotel_backend.service.RoomOrganiser;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
@@ -18,17 +20,25 @@ public class ReservationController {
     ReservationRepository reservationRepository;
     CategoryRepository categoryRepository;
     RoomOrganiser roomOrganiser;
+    ReservedRoomRepository reservedRoomRepository;
 
     @Autowired
-    public ReservationController(CategoryRepository categoryRepository, ReservationRepository reservationRepository, RoomOrganiser roomOrganiser) {
+    public ReservationController(CategoryRepository categoryRepository, ReservationRepository reservationRepository,
+                                 RoomOrganiser roomOrganiser, ReservedRoomRepository reservedRoomRepository) {
         this.categoryRepository = categoryRepository;
         this.reservationRepository = reservationRepository;
         this.roomOrganiser = roomOrganiser;
+        this.reservedRoomRepository = reservedRoomRepository;
     }
 
     @RequestMapping(value = "/get-all-reservations")
     public List<Reservation> getAllReservations() {
         return roomOrganiser.getAllReservations();
+    }
+
+    @RequestMapping(value = "/get-all-reserved-room-repo")
+    public List<ReservedRoom> getAllReservedRooms() {
+        return reservedRoomRepository.findAll();
     }
 
     @RequestMapping(value = "/category/reserve/{category_id}/{start}/{end}", method = RequestMethod.POST)
