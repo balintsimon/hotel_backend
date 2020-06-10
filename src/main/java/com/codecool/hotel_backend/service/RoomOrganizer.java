@@ -86,10 +86,64 @@ public class RoomOrganizer {
         return availableRooms;
     }
 
+    public List<Room> getTakenRooms(String start, String end) {
+        LocalDate startDate = convertStringToLocalDate(start);
+        LocalDate endDate = convertStringToLocalDate(end);
+        List<Reservation> reservations = reservationRepository.findAll();
+        List<Reservation> foundReservations = findReservationsInTimeFrame(startDate, endDate, reservations);
+
+        List<ReservedRoom> allReservedRooms = reservedRoomRepository.findAll();
+        List<ReservedRoom> allFoundReservedRooms = getReservedRoomsFromReservations(foundReservations, allReservedRooms);
+        List<Room> allFoundRooms = getRoomsFromReservedRooms(allFoundReservedRooms);
+
+        List<Room> allRooms = roomRepository.findAll();
+        List<Room> availableRooms = new ArrayList<>();
+        List<Room> takenRooms = new ArrayList<>();
+
+        for (Room actualRoom : allRooms) {
+            if (!allFoundRooms.contains(actualRoom)) {
+                availableRooms.add(actualRoom);
+            } else {
+                takenRooms.add(actualRoom);
+            }
+        }
+
+        System.out.println(takenRooms);
+        return takenRooms;
+    }
+
+    public List<Room> getTakenRoomsInCategory(String start, String end, Long categoryId) {
+        LocalDate startDate = convertStringToLocalDate(start);
+        LocalDate endDate = convertStringToLocalDate(end);
+        List<Reservation> reservations = reservationRepository.findAll();
+        List<Reservation> foundReservations = findReservationsInTimeFrame(startDate, endDate, reservations);
+
+        List<ReservedRoom> allReservedRooms = reservedRoomRepository.findAll();
+        List<ReservedRoom> allFoundReservedRooms = getReservedRoomsFromReservations(foundReservations, allReservedRooms);
+        List<Room> allFoundRooms = getRoomsFromReservedRooms(allFoundReservedRooms);
+
+        List<Room> allRooms = roomRepository.findAllByCategory_Id(categoryId);
+        List<Room> availableRooms = new ArrayList<>();
+        List<Room> takenRooms = new ArrayList<>();
+
+        for (Room actualRoom : allRooms) {
+            if (!allFoundRooms.contains(actualRoom)) {
+                availableRooms.add(actualRoom);
+            } else {
+                takenRooms.add(actualRoom);
+            }
+        }
+
+        System.out.println(availableRooms.size() + " number of available");
+        System.out.println(takenRooms.size() + " number of taken");
+
+        return takenRooms;
+    }
+
     private List<Room> getRoomsFromReservedRooms(List<ReservedRoom> reservedRooms) {
         List<Room> rooms = new ArrayList<>();
         for (ReservedRoom actualReservedRoom : reservedRooms) {
-                rooms.add(actualReservedRoom.getRoom());
+            rooms.add(actualReservedRoom.getRoom());
         }
         return rooms;
     }
@@ -105,20 +159,20 @@ public class RoomOrganizer {
         return foundReservedRooms;
     }
 
-    private List<Reservation>  findReservationsInTimeFrame(LocalDate startDate, LocalDate endDate, List<Reservation> reservations) {
+    private List<Reservation> findReservationsInTimeFrame(LocalDate startDate, LocalDate endDate, List<Reservation> reservations) {
         List<Reservation> foundReservations = new ArrayList<>();
         for (Reservation reservation : reservations) {
-           assert startDate != null;
-           assert endDate != null;
-           if ((startDate.isBefore(reservation.getEndDate()) && startDate.isAfter(reservation.getStartDate()))
-                   || (startDate.isEqual(reservation.getStartDate()) || startDate.isEqual(reservation.getEndDate()))
-               || (endDate.isBefore(reservation.getEndDate()) && endDate.isAfter(reservation.getStartDate()))
-                   || (endDate.isEqual(reservation.getStartDate()) || endDate.isEqual(reservation.getEndDate()))
-               || (startDate.isBefore(reservation.getStartDate()) && endDate.isAfter(reservation.getEndDate()))
-           ) {
-               foundReservations.add(reservation);
-           }
-       }
+            assert startDate != null;
+            assert endDate != null;
+            if ((startDate.isBefore(reservation.getEndDate()) && startDate.isAfter(reservation.getStartDate()))
+                    || (startDate.isEqual(reservation.getStartDate()) || startDate.isEqual(reservation.getEndDate()))
+                    || (endDate.isBefore(reservation.getEndDate()) && endDate.isAfter(reservation.getStartDate()))
+                    || (endDate.isEqual(reservation.getStartDate()) || endDate.isEqual(reservation.getEndDate()))
+                    || (startDate.isBefore(reservation.getStartDate()) && endDate.isAfter(reservation.getEndDate()))
+            ) {
+                foundReservations.add(reservation);
+            }
+        }
         return foundReservations;
     }
 
