@@ -61,8 +61,6 @@ public class RoomController {
         return roomOrganiser.getTakenRoomsInCategory(start, end, id);
     }
 
-
-
     @GetMapping("/available-number-of-available-rooms/{start}/{end}")
     public int getNumberOfAllAvailableRoomsInTimeFrame(@PathVariable("start") String start,
                                                        @PathVariable("end") String end) {
@@ -74,26 +72,6 @@ public class RoomController {
                                                                                  @PathVariable("end") String end) {
         return reservationRepository.getAllAvailableRoomsByCategoryInTimeFrame(LocalDate.parse(start), LocalDate.parse(end));
     }
-
-//    @RequestMapping(value = "/numberOfAvailableRoomsByCategory/{id}/{start}/{end}", method = RequestMethod.GET)
-//    public int getNumberOfAvailableRoomsByCategoryId(@PathVariable("id") Long id,
-//                                                     @PathVariable("start") String start,
-//                                                     @PathVariable("end") String end) {
-//        return reservationRepository.getNumberOfAvailableRoomsByCategoryId(id, LocalDate.parse(start), LocalDate.parse(end));
-//    }
-
-//    // TODO: write JPQL check query instead of backend logic
-//    @RequestMapping(value = "/category/available/{id}/{start}/{end}", method = RequestMethod.POST)
-//    public boolean checkIfCategoryAvailableInTimeFrameById(@PathVariable("id") Long id,
-//                                                           @PathVariable("start") String start,
-//                                                           @PathVariable("end") String end) {
-//        // TODO: check if original logic produces different results
-////        List<Reservation> allRoomsOfType = reservationRepository.getAllById(id);
-////        List<Reservation> takenRooms = reservationRepository.getAvailableReservations(LocalDate.parse(start), LocalDate.parse(end));
-////        return takenRooms.size() < allRoomsOfType.size();
-//        int availableRoomNumber = getNumberOfAvailableRoomsByCategoryId(id, start, end);
-//        return availableRoomNumber > 0;
-//    }
 
     @GetMapping("/allOccupiedRooms/{start}/{end}")
     public List<Room> getAllOccupiedRooms(@PathVariable("start") String start,
