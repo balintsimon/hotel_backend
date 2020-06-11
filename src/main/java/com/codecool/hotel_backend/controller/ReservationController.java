@@ -37,9 +37,14 @@ public class ReservationController {
                                        @PathVariable("room_id") Long room_id,
                                        @PathVariable("start") String start,
                                        @PathVariable("end") String end) {
-        roomOrganiser.finaliseReservation(res_id, room_id, start, end);
+        try {
+            roomOrganiser.finaliseReservation(res_id, room_id, start, end);
+            return true;
+        } catch (Exception e) {
+            e.printStackTrace();
+            return false;
+        }
 
-        return true;
     }
 
     @RequestMapping(value = "/get-all-reservations")

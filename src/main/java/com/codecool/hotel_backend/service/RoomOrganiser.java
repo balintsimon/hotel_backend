@@ -34,13 +34,15 @@ public class RoomOrganiser {
         this.roomRepository = roomRepository;
     }
 
-    public boolean finaliseReservation(Long reservationId, Long roomId, String start, String end) {
+    public boolean finaliseReservation(Long reservationId, Long roomId, String start, String end) throws IllegalArgumentException {
 
         LocalDate startDate = organiserUtils.convertStringToLocalDate(start);
         LocalDate endDate = organiserUtils.convertStringToLocalDate(end);
 
         Reservation foundReservation = reservationRepository.findReservationById(reservationId);
         Room foundRoom = roomRepository.findRoomById(roomId);
+        if (foundRoom == null) throw new IllegalArgumentException();
+        if (foundReservation == null) throw new IllegalArgumentException();
 
         foundReservation.setStartDate(startDate);
         foundReservation.setEndDate(endDate);
