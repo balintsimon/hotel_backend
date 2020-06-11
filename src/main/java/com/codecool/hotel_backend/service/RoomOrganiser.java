@@ -77,6 +77,14 @@ public class RoomOrganiser {
         return false;
     }
 
+    public Room getFirstAvailableRoomInCategory(String start, String end, Long categoryId) {
+        List<Room> allAvailableRooms = getAvailableRoomsInCategory(start, end, categoryId);
+        if (allAvailableRooms != null) {
+            return allAvailableRooms.get(0);
+        }
+        return null;
+    }
+
     public List<Room> getAvailableRoomsInCategory(String start, String end, Long categoryId) {
         LocalDate startDate = organiserUtils.convertStringToLocalDate(start);
         LocalDate endDate = organiserUtils.convertStringToLocalDate(end);
