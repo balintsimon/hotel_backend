@@ -40,7 +40,8 @@ public class RoomOrganiser {
         LocalDate endDate = organiserUtils.convertStringToLocalDate(end);
 
         Reservation foundReservation = reservationRepository.findReservationById(reservationId);
-        System.out.println(foundReservation);
+        Room foundRoom = roomRepository.findRoomById(roomId);
+        System.out.println(foundRoom);
 
 
         //reservationRepository.updateReservation(reservationId, startDate, endDate);
