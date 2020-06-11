@@ -34,6 +34,31 @@ public class RoomOrganiser {
         this.roomRepository = roomRepository;
     }
 
+    public boolean finaliseReservation(Long reservationId, Long roomId, String start, String end) throws IllegalArgumentException {
+
+        LocalDate startDate = organiserUtils.convertStringToLocalDate(start);
+        LocalDate endDate = organiserUtils.convertStringToLocalDate(end);
+
+        Reservation foundReservation = reservationRepository.findReservationById(reservationId);
+        Room foundRoom = roomRepository.findRoomById(roomId);
+        if (foundRoom == null) throw new IllegalArgumentException();
+        if (foundReservation == null) throw new IllegalArgumentException();
+
+        foundReservation.setStartDate(startDate);
+        foundReservation.setEndDate(endDate);
+
+        ReservedRoom reservedRoom = ReservedRoom.builder()
+                .reservation(foundReservation)
+                .room(foundRoom)
+                .build();
+
+        foundReservation.setReservedRoom(reservedRoom);
+        reservationRepository.updateReservation(reservationId, startDate, endDate); // JDBC won't accept reservedRoom
+        reservedRoomRepository.save(reservedRoom);
+
+        return true;
+    }
+
     public List<Room> getAvailableRooms(String start, String end) {
         LocalDate startDate = organiserUtils.convertStringToLocalDate(start);
         LocalDate endDate = organiserUtils.convertStringToLocalDate(end);
