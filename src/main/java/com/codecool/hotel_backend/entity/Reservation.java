@@ -1,7 +1,11 @@
 package com.codecool.hotel_backend.entity;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 import lombok.*;
+import org.hibernate.annotations.Fetch;
+import org.hibernate.annotations.FetchMode;
 
 import javax.persistence.*;
 import java.time.LocalDate;
@@ -26,8 +30,10 @@ public class Reservation {
 
     @ToString.Exclude
     @EqualsAndHashCode.Exclude
-    @JsonIgnore
-    @OneToOne(mappedBy = "reservation", cascade = {CascadeType.PERSIST, CascadeType.REMOVE})
+//    @JsonIgnore
+    @JsonManagedReference
+    @OneToOne(mappedBy = "reservation",
+            cascade = {CascadeType.PERSIST, CascadeType.REMOVE})
     private ReservedRoom reservedRoom;
 
 }
