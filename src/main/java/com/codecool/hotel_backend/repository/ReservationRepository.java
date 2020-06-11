@@ -3,10 +3,12 @@ package com.codecool.hotel_backend.repository;
 import ch.qos.logback.core.boolex.EvaluationException;
 import com.codecool.hotel_backend.entity.Category;
 import com.codecool.hotel_backend.entity.Reservation;
+import com.codecool.hotel_backend.entity.ReservedRoom;
 import com.codecool.hotel_backend.entity.Room;
 import org.hibernate.annotations.Fetch;
 import org.hibernate.annotations.FetchMode;
 import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 
@@ -34,6 +36,17 @@ public interface ReservationRepository extends JpaRepository<Reservation, Long> 
     List<Reservation> getAvailableReservations(@Param("startDate") LocalDate startDate, @Param("endDate") LocalDate endDate);
 
     List<Reservation> findAll();
+
+    //@Query("SELECT reservation FROM Reservation reservation WHERE reservation.id = :res_id")
+    Reservation findReservationById(Long Id);
+
+    @Modifying
+    @Query("UPDATE Reservation res SET res.startDate = :newStartDate, res.endDate = :newEndDate, res.reservedRoom = :reserved_room " +
+            "WHERE res.id = :reservation_id")
+    void updateReservation(@Param("reservation_id") Long reservationId,
+                           @Param("newStartDate") LocalDate startDate,
+                           @Param("newEndDate") LocalDate endDate,
+                           @Param("reserved_room")ReservedRoom reservedRoom);
 
     @Query(value = "SELECT room FROM Room room" +
             " WHERE room.id NOT IN" +

@@ -34,9 +34,16 @@ public class RoomOrganiser {
         this.roomRepository = roomRepository;
     }
 
-    public boolean finaliseReservation(Long reservationId, String start, String end) {
+    public boolean finaliseReservation(Long reservationId, Long roomId, String start, String end) {
+
+        LocalDate startDate = organiserUtils.convertStringToLocalDate(start);
+        LocalDate endDate = organiserUtils.convertStringToLocalDate(end);
+
+        Reservation foundReservation = reservationRepository.findReservationById(reservationId);
+        System.out.println(foundReservation);
 
 
+        //reservationRepository.updateReservation(reservationId, startDate, endDate);
 
         return true;
     }
