@@ -34,6 +34,13 @@ public class RoomOrganiser {
         this.roomRepository = roomRepository;
     }
 
+    public boolean finaliseReservation(Long reservationId, String start, String end) {
+
+
+
+        return true;
+    }
+
     public List<Room> getAvailableRooms(String start, String end) {
         LocalDate startDate = organiserUtils.convertStringToLocalDate(start);
         LocalDate endDate = organiserUtils.convertStringToLocalDate(end);

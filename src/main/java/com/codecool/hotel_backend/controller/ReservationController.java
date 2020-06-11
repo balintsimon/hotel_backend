@@ -32,6 +32,15 @@ public class ReservationController {
     @RequestMapping("/get-reserved-and-reservation-joined")
     public List<Reservation> test() {return reservationRepository.getAllReservationJoin();}
 
+    @RequestMapping(value = "/finalise_reservation/{res_id}/{start}/{end}", method = RequestMethod.POST)
+    public boolean finaliseReservation(@PathVariable("res_id") Long id,
+                                       @PathVariable("start") String start,
+                                       @PathVariable("end") String end) {
+        roomOrganiser.finaliseReservation(id, start, end);
+
+        return true;
+    }
+
     @RequestMapping(value = "/get-all-reservations")
     public List<Reservation> getAllReservations() {
         return roomOrganiser.getAllReservations();
