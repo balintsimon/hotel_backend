@@ -1,5 +1,6 @@
 package com.codecool.hotel_backend.service;
 
+import com.codecool.hotel_backend.entity.Category;
 import com.codecool.hotel_backend.entity.Reservation;
 import com.codecool.hotel_backend.entity.ReservedRoom;
 import com.codecool.hotel_backend.entity.Room;
@@ -100,6 +101,29 @@ public class RoomOrganiser {
             return true;
         }
         return false;
+    }
+
+    public List<Category> getAvailableCategoriesInTimeFrame(String start, String end) {
+
+        List<Category> categoryList = categoryRepository.findAll();
+        List<Long> categoryIdList = new ArrayList<>();
+        List<Category> availableCategories = new ArrayList<>();
+
+        for (Category category : categoryList) {
+            categoryIdList.add(category.getId());
+        }
+
+        // This search is inefficient because it asks all the number of rooms in a category
+        // But I didn't have time to do a cleaner implementation yet
+        // TODO: Optimise this
+        for (Long categoryId : categoryIdList) {
+            List<Room> availableRoomsInCategory = getAvailableRoomsInCategory(start, end, categoryId);
+            if (availableRoomsInCategory != null) {
+                availableCategories.add(categoryRepository.findCategoryById(categoryId));
+            }
+        }
+
+        return availableCategories;
     }
 
     public Room getFirstAvailableRoomInCategory(String start, String end, Long categoryId) {

@@ -2,6 +2,7 @@ package com.codecool.hotel_backend.controller;
 
 import com.codecool.hotel_backend.entity.Category;
 import com.codecool.hotel_backend.repository.CategoryRepository;
+import com.codecool.hotel_backend.service.RoomOrganiser;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
@@ -11,10 +12,12 @@ import java.util.List;
 @RequestMapping("/category")
 public class CategoryController {
     CategoryRepository categoryRepository;
+    RoomOrganiser roomOrganiser;
 
     @Autowired
-    public CategoryController(CategoryRepository categoryRepository) {
+    public CategoryController(CategoryRepository categoryRepository, RoomOrganiser roomOrganiser) {
         this.categoryRepository = categoryRepository;
+        this.roomOrganiser = roomOrganiser;
     }
 
     @GetMapping("/{id}")
@@ -27,11 +30,8 @@ public class CategoryController {
         return categoryRepository.getCategoryStorage();
     }
 
-    @GetMapping("/get-available-categories-in-timeframe/{start}/{end}")
+    @RequestMapping("/get-available-categories-in-time-frame/{start}/{end}")
     public List<Category> getAvailableCategories(@PathVariable("start") String start, @PathVariable("end") String end) {
-
-
-
-        return null;
+        return roomOrganiser.getAvailableCategoriesInTimeFrame(start, end);
     }
 }
