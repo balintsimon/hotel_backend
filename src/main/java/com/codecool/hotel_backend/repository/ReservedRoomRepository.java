@@ -8,6 +8,8 @@ import java.util.List;
 
 public interface ReservedRoomRepository extends JpaRepository<ReservedRoom, Long> {
 
-    @Query("select reserve, room, reserved from ReservedRoom reserve join reserve.room room join reserve.reservation reserved")
+    @Query("select reserve, room, reserved from ReservedRoom reserve " +
+            "join reserve.room room join reserve.reservation reserved")
     List<ReservedRoom> findAll();
+
 }

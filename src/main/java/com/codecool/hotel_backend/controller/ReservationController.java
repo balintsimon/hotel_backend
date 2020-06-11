@@ -29,6 +29,9 @@ public class ReservationController {
         this.reservedRoomRepository = reservedRoomRepository;
     }
 
+    @RequestMapping("/test")
+    public List<Reservation> test() {return reservationRepository.getAllReservationJoin();}
+
     @RequestMapping(value = "/get-all-reservations")
     public List<Reservation> getAllReservations() {
         return roomOrganiser.getAllReservations();

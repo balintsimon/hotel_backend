@@ -4,6 +4,8 @@ import ch.qos.logback.core.boolex.EvaluationException;
 import com.codecool.hotel_backend.entity.Category;
 import com.codecool.hotel_backend.entity.Reservation;
 import com.codecool.hotel_backend.entity.Room;
+import org.hibernate.annotations.Fetch;
+import org.hibernate.annotations.FetchMode;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
@@ -13,6 +15,13 @@ import java.util.List;
 import java.util.Map;
 
 public interface ReservationRepository extends JpaRepository<Reservation, Long> {
+
+
+    @Query(value = "select * from Reservation left join " +
+            "Reserved_Room on Reserved_Room.reservation_id = Reservation.id"
+    , nativeQuery=true)
+    List<Reservation> getAllReservationJoin();
+
     List<Reservation> getAllById(Long id);
 
     @Query(value = "SELECT res.id, res.startDate, res.endDate, res.category.id\n" +
