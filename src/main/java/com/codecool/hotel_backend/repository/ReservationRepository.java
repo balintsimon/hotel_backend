@@ -12,6 +12,7 @@ import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 
+import javax.transaction.Transactional;
 import java.time.LocalDate;
 import java.util.List;
 import java.util.Map;
@@ -41,12 +42,12 @@ public interface ReservationRepository extends JpaRepository<Reservation, Long> 
     Reservation findReservationById(Long Id);
 
     @Modifying
-    @Query("UPDATE Reservation res SET res.startDate = :newStartDate, res.endDate = :newEndDate, res.reservedRoom = :reserved_room " +
+    @Transactional
+    @Query("UPDATE Reservation res SET res.startDate = :newStartDate, res.endDate = :newEndDate " +
             "WHERE res.id = :reservation_id")
     void updateReservation(@Param("reservation_id") Long reservationId,
                            @Param("newStartDate") LocalDate startDate,
-                           @Param("newEndDate") LocalDate endDate,
-                           @Param("reserved_room")ReservedRoom reservedRoom);
+                           @Param("newEndDate") LocalDate endDate);
 
     @Query(value = "SELECT room FROM Room room" +
             " WHERE room.id NOT IN" +

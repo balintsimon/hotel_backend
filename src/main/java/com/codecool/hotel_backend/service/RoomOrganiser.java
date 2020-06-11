@@ -41,10 +41,18 @@ public class RoomOrganiser {
 
         Reservation foundReservation = reservationRepository.findReservationById(reservationId);
         Room foundRoom = roomRepository.findRoomById(roomId);
-        System.out.println(foundRoom);
 
+        foundReservation.setStartDate(startDate);
+        foundReservation.setEndDate(endDate);
 
-        //reservationRepository.updateReservation(reservationId, startDate, endDate);
+        ReservedRoom reservedRoom = ReservedRoom.builder()
+                .reservation(foundReservation)
+                .room(foundRoom)
+                .build();
+
+        foundReservation.setReservedRoom(reservedRoom);
+        reservationRepository.updateReservation(reservationId, startDate, endDate); // JDBC won't accept reservedRoom
+        reservedRoomRepository.save(reservedRoom);
 
         return true;
     }
