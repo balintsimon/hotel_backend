@@ -38,8 +38,7 @@ public class ReservationController {
                                        @PathVariable("start") String start,
                                        @PathVariable("end") String end) {
         try {
-            roomOrganiser.finaliseReservation(res_id, room_id, start, end);
-            return true;
+            return roomOrganiser.finaliseReservation(res_id, room_id, start, end);
         } catch (Exception e) {
             e.printStackTrace();
             return false;

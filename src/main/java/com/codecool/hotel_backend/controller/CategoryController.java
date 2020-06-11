@@ -26,4 +26,12 @@ public class CategoryController {
     public List<Category> getAllCategory() {
         return categoryRepository.getCategoryStorage();
     }
+
+    @GetMapping("/get-available-categories-in-timeframe/{start}/{end}")
+    public List<Category> getAvailableCategories(@PathVariable("start") String start, @PathVariable("end") String end) {
+
+
+
+        return null;
+    }
 }
