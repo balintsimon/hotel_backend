@@ -42,20 +42,26 @@ public class RoomOrganiser {
 
         Reservation foundReservation = reservationRepository.findReservationById(reservationId);
         Room foundRoom = roomRepository.findRoomById(roomId);
+
         if (foundRoom == null) throw new IllegalArgumentException();
         if (foundReservation == null) throw new IllegalArgumentException();
+
+        ReservedRoom reservedRoom = reservedRoomRepository.findByReservationId(foundReservation.getId());
+        boolean roomAlreadyReserved = true;
+        if (reservedRoom == null) {
+            reservedRoom = ReservedRoom.builder().reservation(foundReservation).room(foundRoom).build();
+            roomAlreadyReserved = false;
+        }
 
         foundReservation.setStartDate(startDate);
         foundReservation.setEndDate(endDate);
 
-        ReservedRoom reservedRoom = ReservedRoom.builder()
-                .reservation(foundReservation)
-                .room(foundRoom)
-                .build();
-
-        foundReservation.setReservedRoom(reservedRoom);
-        reservationRepository.updateReservation(reservationId, startDate, endDate); // JDBC won't accept reservedRoom
-        reservedRoomRepository.save(reservedRoom);
+        reservationRepository.updateReservation(reservationId, startDate, endDate); // This properly updates the reservation
+        if (roomAlreadyReserved) {
+            reservedRoomRepository.updateReservedRoom(reservedRoom.getId(), roomId); // This updates the reserved room if needed
+        } else {
+            reservedRoomRepository.save(reservedRoom);
+        }
 
         return true;
     }
