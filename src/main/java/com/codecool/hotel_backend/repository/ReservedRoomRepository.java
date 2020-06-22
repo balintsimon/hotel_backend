@@ -12,4 +12,6 @@ public interface ReservedRoomRepository extends JpaRepository<ReservedRoom, Long
             "join reserve.room room join reserve.reservation reserved")
     List<ReservedRoom> findAll();
 
+    @Query("select reservedRoom from ReservedRoom reservedRoom where reservedRoom.reservation = :reservationId")
+    ReservedRoom findByReservationId(Long reservationId);
 }
