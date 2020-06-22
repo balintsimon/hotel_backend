@@ -1,39 +1,37 @@
 package com.codecool.hotel_backend.controller;
 
-import com.codecool.hotel_backend.model.Category;
-import com.codecool.hotel_backend.model.Room;
-import com.codecool.hotel_backend.service.CategoryStorage;
-import com.codecool.hotel_backend.service.RoomStorage;
+import com.codecool.hotel_backend.entity.Category;
+import com.codecool.hotel_backend.repository.CategoryRepository;
+import com.codecool.hotel_backend.service.RoomOrganiser;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
-import java.util.Map;
 
 @RestController
 @RequestMapping("/category")
 public class CategoryController {
-    CategoryStorage categoryStorage;
-    RoomStorage roomStorage;
+    CategoryRepository categoryRepository;
+    RoomOrganiser roomOrganiser;
 
     @Autowired
-    public CategoryController(CategoryStorage categoryStorage,RoomStorage roomStorage){
-        this.categoryStorage = categoryStorage;
-        this.roomStorage = roomStorage;
+    public CategoryController(CategoryRepository categoryRepository, RoomOrganiser roomOrganiser) {
+        this.categoryRepository = categoryRepository;
+        this.roomOrganiser = roomOrganiser;
     }
 
     @GetMapping("/{id}")
-    public Category getAllByCategory(@PathVariable("id") int id){
-        return categoryStorage.getCategoryById(id);
+    public Category getAllByCategory(@PathVariable("id") Long id) {
+        return categoryRepository.findCategoryById(id);
     }
 
     @GetMapping("/all")
-    public List<Category> getAllCategory(){
-        return categoryStorage.getCategoryStorage();
+    public List<Category> getAllCategory() {
+        return categoryRepository.getCategoryStorage();
     }
 
-    @RequestMapping(value = "/reserve/{id}", method = RequestMethod.POST)
-    public Room reserveARoomByCategoryId(@PathVariable("id") int id){
-        return roomStorage.reserveARoom(id);
+    @RequestMapping("/get-available-categories-in-time-frame/{start}/{end}")
+    public List<Category> getAvailableCategories(@PathVariable("start") String start, @PathVariable("end") String end) {
+        return roomOrganiser.getAvailableCategoriesInTimeFrame(start, end);
     }
 }
