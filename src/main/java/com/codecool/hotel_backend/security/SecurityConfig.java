@@ -42,6 +42,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
             .and()
                 .authorizeRequests()
                 .antMatchers("/", "/category/get-available-categories-in-time-frame/**/**","/auth/signin", "/category/all").permitAll() // allowed by anyone
+                .antMatchers("/auth/register-user").permitAll()
                 .antMatchers("/booking/**").hasRole("ADMIN")
                 .anyRequest().denyAll()
             .and()
