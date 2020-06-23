@@ -53,4 +53,20 @@ public class AuthController {
             throw new BadCredentialsException("Invalid username/password supplied");
         }
     }
+
+    @PostMapping(value = "/register-user")
+    public boolean registration(@RequestBody UserCredentials data) {
+        try {
+            String userName = data.getUsername();
+            String password = data.getPassword();
+
+            System.out.println(userName + password);
+
+        } catch (Exception e) {
+            e.printStackTrace();
+            return false;
+        }
+
+        return true;
+    }
 }
