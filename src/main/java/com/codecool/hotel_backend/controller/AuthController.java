@@ -54,7 +54,9 @@ public class AuthController {
             model.put("token", token);
             return ResponseEntity.ok(model);
         } catch (AuthenticationException e) {
-            throw new BadCredentialsException("Invalid username/password supplied");
+            Map<Object, Object> model = new HashMap<>();
+            model.put("username", "WRONG");
+            return ResponseEntity.ok(model);
         }
     }
 
