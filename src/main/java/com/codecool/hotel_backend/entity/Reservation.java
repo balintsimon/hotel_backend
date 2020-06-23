@@ -1,5 +1,6 @@
 package com.codecool.hotel_backend.entity;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
@@ -35,5 +36,9 @@ public class Reservation {
     @OneToOne(mappedBy = "reservation",
             cascade = {CascadeType.PERSIST, CascadeType.REMOVE})
     private ReservedRoom reservedRoom;
+
+    @JsonBackReference
+    @ManyToOne
+    private HotelUser user;
 
 }
