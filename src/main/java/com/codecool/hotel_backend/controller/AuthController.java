@@ -1,6 +1,6 @@
 package com.codecool.hotel_backend.controller;
 
-import com.codecool.hotel_backend.model.UserCredentials;
+import com.codecool.hotel_backend.entity.UserCredentials;
 import com.codecool.hotel_backend.security.JwtTokenServices;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.AuthenticationManager;

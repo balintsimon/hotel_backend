@@ -1,6 +1,6 @@
 package com.codecool.hotel_backend.security;
 
-import com.codecool.hotel_backend.model.HotelUser;
+import com.codecool.hotel_backend.entity.HotelUser;
 import com.codecool.hotel_backend.repository.UserRepository;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.User;

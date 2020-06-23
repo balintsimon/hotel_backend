@@ -1,4 +1,4 @@
-package com.codecool.hotel_backend.model;
+package com.codecool.hotel_backend.entity;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;

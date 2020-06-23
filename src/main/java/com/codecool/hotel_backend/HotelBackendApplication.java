@@ -4,7 +4,7 @@ import com.codecool.hotel_backend.entity.Category;
 import com.codecool.hotel_backend.entity.Reservation;
 import com.codecool.hotel_backend.entity.ReservedRoom;
 import com.codecool.hotel_backend.entity.Room;
-import com.codecool.hotel_backend.model.HotelUser;
+import com.codecool.hotel_backend.entity.HotelUser;
 import com.codecool.hotel_backend.repository.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.CommandLineRunner;
