@@ -42,8 +42,8 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
             .and()
                 .authorizeRequests()
                 .antMatchers("/", "/category/get-available-categories-in-time-frame/**/**","/auth/signin", "/category/all").permitAll() // allowed by anyone
-                .antMatchers("/booking/**").hasRole("ADMIN")
-                //routes for admin page
+                .antMatchers("/auth/register-user").permitAll()
+                .antMatchers("/booking/**").authenticated()
                 .antMatchers("/reservation/delete/{id}","/finalise_reservation/{res_id}/{room_id}/{start}/{end}","/all-available-category/{start}/{end}/{id}","/category/reserve/{category_id}/{start}/{end}").hasRole("ADMIN")
                 .anyRequest().denyAll()
             .and()

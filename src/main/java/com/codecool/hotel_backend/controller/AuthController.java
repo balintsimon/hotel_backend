@@ -34,6 +34,7 @@ public class AuthController {
 
     @PostMapping(value = "/signin")
     public ResponseEntity signIn(@RequestBody UserCredentials data) {
+        Map<Object, Object> model = new HashMap<>();
         try {
             String username = data.getUsername();
             Authentication authentication = authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(username, data.getPassword()));
@@ -44,13 +45,14 @@ public class AuthController {
 
             String token = jwtTokenServices.createToken(username, roles);
 
-            Map<Object, Object> model = new HashMap<>();
             model.put("username", username);
             model.put("roles", roles);
             model.put("token", token);
+            model.put("status","DONE");
             return ResponseEntity.ok(model);
         } catch (AuthenticationException e) {
-            throw new BadCredentialsException("Invalid username/password supplied");
+            model.put("status", "WRONG");
+            return ResponseEntity.ok(model);
         }
     }
 }
