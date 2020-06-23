@@ -41,7 +41,8 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
             .sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS)
             .and()
                 .authorizeRequests()
-                .antMatchers("/", "/category/get-available-categories-in-time-frame/**/**","/auth/signin", "/category/all").permitAll() // allowed by anyone
+                // TODO: delete /test endpoint after testing
+                .antMatchers("/", "/category/get-available-categories-in-time-frame/**/**","/auth/signin", "/category/all", "/test").permitAll() // allowed by anyone
                 .antMatchers("/booking/**").hasRole("ADMIN")
                 .anyRequest().denyAll()
             .and()

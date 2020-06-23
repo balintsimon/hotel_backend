@@ -92,7 +92,7 @@ public class RoomOrganiser {
         return availableRooms;
     }
 
-    public boolean reserveRoom(Long categoryId, String start, String end) {
+    public boolean reserveRoomCategory(Long categoryId, String start, String end) {
         List<Room> availableRooms = getAvailableRoomsInCategory(start, end, categoryId);
         LocalDate startDate = organiserUtils.convertStringToLocalDate(start);
         LocalDate endDate = organiserUtils.convertStringToLocalDate(end);

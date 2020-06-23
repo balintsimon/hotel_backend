@@ -1,15 +1,20 @@
 package com.codecool.hotel_backend.controller;
 
+import com.codecool.hotel_backend.entity.HotelUser;
 import com.codecool.hotel_backend.entity.Reservation;
 import com.codecool.hotel_backend.entity.ReservedRoom;
 import com.codecool.hotel_backend.repository.CategoryRepository;
 import com.codecool.hotel_backend.repository.ReservationRepository;
 import com.codecool.hotel_backend.repository.ReservedRoomRepository;
+import com.codecool.hotel_backend.repository.UserRepository;
+import com.codecool.hotel_backend.security.JwtTokenServices;
 import com.codecool.hotel_backend.service.RoomOrganiser;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
+import javax.servlet.http.HttpServletRequest;
 import java.util.List;
+import java.util.Optional;
 
 
 @RestController
@@ -19,14 +24,19 @@ public class ReservationController {
     CategoryRepository categoryRepository;
     RoomOrganiser roomOrganiser;
     ReservedRoomRepository reservedRoomRepository;
+    UserRepository userRepository;
+    JwtTokenServices jwtTokenServices;
 
     @Autowired
     public ReservationController(CategoryRepository categoryRepository, ReservationRepository reservationRepository,
-                                 RoomOrganiser roomOrganiser, ReservedRoomRepository reservedRoomRepository) {
+                                 RoomOrganiser roomOrganiser, ReservedRoomRepository reservedRoomRepository,
+                                 UserRepository userRepository, JwtTokenServices jwtTokenServices) {
         this.categoryRepository = categoryRepository;
         this.reservationRepository = reservationRepository;
         this.roomOrganiser = roomOrganiser;
         this.reservedRoomRepository = reservedRoomRepository;
+        this.userRepository = userRepository;
+        this.jwtTokenServices = jwtTokenServices;
     }
 
     @RequestMapping("/get-reserved-and-reservation-joined")
@@ -59,8 +69,9 @@ public class ReservationController {
     @RequestMapping(value = "/category/reserve/{category_id}/{start}/{end}", method = RequestMethod.POST)
     public boolean reserveRoom(@PathVariable("category_id") Long id,
                                @PathVariable("start") String start,
-                               @PathVariable("end") String end) {
-        return roomOrganiser.reserveRoom(id, start, end);
+                               @PathVariable("end") String end,
+                               @RequestHeader String Authorization) {
+        return roomOrganiser.reserveRoomCategory(id, start, end);
     }
 
     @RequestMapping(value = "/category/available/{id}/{start}/{end}", method = RequestMethod.POST)
@@ -69,4 +80,17 @@ public class ReservationController {
                                                            @PathVariable("end") String end) {
         return roomOrganiser.getAvailableRoomsInCategory(start, end, id).size() > 0;
     }
+
+    private HotelUser getUserFromToken(String authorizationString) {
+        String token = jwtTokenServices.getTokenFromRequestHeaderAuthorization(authorizationString);
+        String loggedInUserName = jwtTokenServices.getUsernameFromToken(token);
+        return userRepository.getHotelUserByUsername(loggedInUserName);
+    }
+
+    @GetMapping("/test")
+    public HotelUser returnHotelUserFromToken(@RequestHeader String Authorization) {
+    return getUserFromToken(Authorization);
+        //        return getUserFromToken(reqHeader);
+    }
+
 }
