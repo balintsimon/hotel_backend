@@ -69,4 +69,8 @@ public class ReservationController {
                                                            @PathVariable("end") String end) {
         return roomOrganiser.getAvailableRoomsInCategory(start, end, id).size() > 0;
     }
+    @DeleteMapping("/reservation/delete/{id}")
+    public void removeCompleted(@PathVariable("id") Long id) {
+        reservationRepository.deleteById(id);
+    }
 }
