@@ -4,19 +4,21 @@ import com.codecool.hotel_backend.entity.Category;
 import com.codecool.hotel_backend.entity.Reservation;
 import com.codecool.hotel_backend.entity.ReservedRoom;
 import com.codecool.hotel_backend.entity.Room;
-import com.codecool.hotel_backend.repository.CategoryRepository;
-import com.codecool.hotel_backend.repository.ReservationRepository;
-import com.codecool.hotel_backend.repository.ReservedRoomRepository;
-import com.codecool.hotel_backend.repository.RoomRepository;
+import com.codecool.hotel_backend.entity.HotelUser;
+import com.codecool.hotel_backend.repository.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Profile;
+import org.springframework.security.crypto.factory.PasswordEncoderFactories;
+import org.springframework.security.crypto.password.PasswordEncoder;
 
 import java.time.LocalDate;
 import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Collections;
 import java.util.List;
 
 @SpringBootApplication
@@ -34,6 +36,10 @@ public class HotelBackendApplication {
     @Autowired
     ReservedRoomRepository reservedRoomRepository;
 
+    @Autowired
+    UserRepository users;
+
+
     public static void main(String[] args) {
         SpringApplication.run(HotelBackendApplication.class, args);
     }
@@ -42,6 +48,8 @@ public class HotelBackendApplication {
     @Profile("production")
     public CommandLineRunner init() {
         return args -> {
+            PasswordEncoder passwordEncoder = PasswordEncoderFactories.createDelegatingPasswordEncoder();
+
             Category luxury = Category.builder()
                     .name("Luxury Room")
                     .capacity(6L)
@@ -120,6 +128,20 @@ public class HotelBackendApplication {
 
 
             reservedRoomRepository.save(reservedRoom);
+
+            users.save(HotelUser.builder()
+                    .username("user")
+                    .password(passwordEncoder.encode("password"))
+                    .roles(Collections.singletonList("ROLE_USER"))
+                    .build()
+            );
+
+            users.save(HotelUser.builder()
+                    .username("admin")
+                    .password(passwordEncoder.encode("password"))
+                    .roles(Arrays.asList("ROLE_USER", "ROLE_ADMIN"))
+                    .build()
+            );
         };
 
     }
