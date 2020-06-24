@@ -93,9 +93,17 @@ public class RoomOrganiser {
     }
 
     public boolean reserveRoom(Long categoryId, String start, String end) {
+        // enddate is larger than startdate
+        // startdate || Localdate.now || > localdate.now
         List<Room> availableRooms = getAvailableRoomsInCategory(start, end, categoryId);
         LocalDate startDate = organiserUtils.convertStringToLocalDate(start);
         LocalDate endDate = organiserUtils.convertStringToLocalDate(end);
+        LocalDate currentDate = LocalDate.now();
+        if (endDate.isBefore(startDate)) {
+            return false;
+        } else if (startDate.isBefore(currentDate)){
+            return false;
+        }
 
         if (availableRooms != null) {
             Reservation reservation = Reservation.builder()
