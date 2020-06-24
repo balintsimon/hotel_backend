@@ -1,7 +1,8 @@
 package com.codecool.hotel_backend.service;
 
 import antlr.StringUtils;
-import com.codecool.hotel_backend.entity.HotelUser;
+import com.codecool.hotel_backend.entity.Role;
+import com.codecool.hotel_backend.entity.SecuUser;
 import com.codecool.hotel_backend.entity.UserCredentials;
 import com.codecool.hotel_backend.repository.UserRepository;
 import org.springframework.security.crypto.factory.PasswordEncoderFactories;
@@ -11,6 +12,7 @@ import org.springframework.stereotype.Component;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
+import java.util.Set;
 
 @Component
 public class UserUtils {
@@ -42,17 +44,17 @@ public class UserUtils {
             }
         }
 
-        List<HotelUser> userList = userRepository.findAll();
-        for (HotelUser hotelUser : userList) {
-            if (hotelUser.getUsername().equals(userName)) {
+        List<SecuUser> userList = userRepository.findAll();
+        for (SecuUser hotelUser : userList) {
+            if (hotelUser.getUserName().equals(userName)) {
                 return "Username already taken";
             }
         }
 
-        HotelUser user = HotelUser.builder()
-                .username(userName)
-                .password(passwordEncoder.encode(password))
-                .roles(Collections.singletonList("ROLE_USER"))
+        SecuUser user = SecuUser.builder()
+                .userName(userName)
+                .hashedPassword(passwordEncoder.encode(password))
+                .roles(Set.of(Role.USER))
                 .build();
 
         userRepository.save(user);

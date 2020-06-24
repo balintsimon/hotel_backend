@@ -1,16 +1,13 @@
 package com.codecool.hotel_backend.controller;
 
 import com.codecool.hotel_backend.entity.UserCredentials;
-import com.codecool.hotel_backend.security.JwtTokenServices;
-import com.codecool.hotel_backend.service.UserUtils;
+import com.codecool.hotel_backend.security.JwtUtil;
+import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseCookie;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.AuthenticationManager;
-import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
-import org.springframework.security.core.AuthenticationException;
-import org.springframework.security.core.GrantedAuthority;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -18,52 +15,32 @@ import org.springframework.web.bind.annotation.RestController;
 
 import javax.servlet.http.HttpServletResponse;
 import java.time.Duration;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-import java.util.stream.Collectors;
 
 @RestController
-@RequestMapping(value = "/auth")
+@RequiredArgsConstructor
+@RequestMapping("/auth")
 public class AuthController {
 
     private final AuthenticationManager authenticationManager;
+    private final JwtUtil jwtUtil;
+//    private final UserService userService;
 
-    private final JwtTokenServices jwtTokenServices;
-
-    private final UserUtils userUtils;
-
-    public AuthController(AuthenticationManager authenticationManager, JwtTokenServices jwtTokenServices, UserUtils userUtils) {
-        this.authenticationManager = authenticationManager;
-        this.jwtTokenServices = jwtTokenServices;
-        this.userUtils = userUtils;
+    @PostMapping("/signin")
+    public ResponseEntity<String> login(@RequestBody UserCredentials secuUser, HttpServletResponse response) {
+        Authentication authentication = authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(
+                secuUser.getUsername(),
+                secuUser.getPassword()
+        ));
+        String jwtToken = jwtUtil.generateToken(authentication);
+        addTokenToCookie(response, jwtToken);
+        return ResponseEntity.ok().body(secuUser.getUsername());
     }
 
-    @PostMapping(value = "/signin")
-    public ResponseEntity<String> signIn(@RequestBody UserCredentials data, HttpServletResponse response) {
-        try {
-            String username = data.getUsername();
-            Authentication authentication = authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(username, data.getPassword()));
-            List<String> roles = authentication.getAuthorities()
-                    .stream()
-                    .map(GrantedAuthority::getAuthority)
-                    .collect(Collectors.toList());
-
-            String token = jwtTokenServices.generateToken(authentication);
-
-            addTokenToCookie(response,token);
-            System.out.println(roles);
-            return ResponseEntity.ok().body(data.getUsername());
-        } catch (AuthenticationException e) {
-            return ResponseEntity.ok().body("WRONG");
-        }
-    }
-
-    @PostMapping(value = "/register-user")
-    public String registration(@RequestBody UserCredentials data) {
-        String response = userUtils.registerUser(data);
-        return "{\"response\": \"" + response + "\"}"; // manual json, Look for modules
-    }
+//    @PostMapping("/signup")
+//    public ResponseEntity<String> signup(@RequestBody UserCredentials secuUser) {
+//        userService.register(secuUser);
+//        return ResponseEntity.status(HttpStatus.CREATED).body(secuUser.getUsername());
+//    }
 
     private void addTokenToCookie(HttpServletResponse response, String token) {
         ResponseCookie cookie = ResponseCookie.from("token", token)
@@ -76,4 +53,5 @@ public class AuthController {
                 .build();
         response.addHeader("Set-Cookie", cookie.toString());
     }
+
 }

@@ -1,25 +1,28 @@
 package com.codecool.hotel_backend.security;
 
-import io.jsonwebtoken.*;
-import lombok.extern.slf4j.Slf4j;
+import io.jsonwebtoken.Claims;
+import io.jsonwebtoken.Jwts;
+import io.jsonwebtoken.SignatureAlgorithm;
 import io.jsonwebtoken.security.Keys;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
-import org.springframework.security.core.userdetails.UsernameNotFoundException;
-import org.springframework.stereotype.Component;
 import org.springframework.stereotype.Service;
 
 import javax.annotation.PostConstruct;
-import javax.servlet.http.HttpServletRequest;
 import java.security.Key;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Date;
+import java.util.List;
 import java.util.stream.Collectors;
 
 @Service
-public class JwtTokenServices {
+public class JwtUtil {
+
+    @Value("${jwt.expiration.minutes}")
+    private int jwtExpirationMinutes;
 
     private Key secretKey;
 
@@ -47,11 +50,10 @@ public class JwtTokenServices {
 
     public String generateToken(Authentication authentication) {
         List<String> roles = authentication
-                .getAuthorities()
+                 .getAuthorities()
                 .stream()
                 .map(GrantedAuthority::getAuthority)
                 .collect(Collectors.toList());
-        int jwtExpirationMinutes = 120000;
         return Jwts.builder()
                 .setSubject(authentication.getName())
                 .claim("roles", roles)
@@ -60,5 +62,4 @@ public class JwtTokenServices {
                 .signWith(secretKey)
                 .compact();
     }
-
 }

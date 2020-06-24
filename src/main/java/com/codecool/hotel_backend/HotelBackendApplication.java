@@ -1,10 +1,6 @@
 package com.codecool.hotel_backend;
 
-import com.codecool.hotel_backend.entity.Category;
-import com.codecool.hotel_backend.entity.Reservation;
-import com.codecool.hotel_backend.entity.ReservedRoom;
-import com.codecool.hotel_backend.entity.Room;
-import com.codecool.hotel_backend.entity.HotelUser;
+import com.codecool.hotel_backend.entity.*;
 import com.codecool.hotel_backend.repository.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.CommandLineRunner;
@@ -16,10 +12,7 @@ import org.springframework.security.crypto.factory.PasswordEncoderFactories;
 import org.springframework.security.crypto.password.PasswordEncoder;
 
 import java.time.LocalDate;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Collections;
-import java.util.List;
+import java.util.*;
 
 @SpringBootApplication
 public class HotelBackendApplication {
@@ -129,18 +122,20 @@ public class HotelBackendApplication {
 
             reservedRoomRepository.save(reservedRoom);
 
-            users.save(HotelUser.builder()
-                    .username("user")
-                    .password(passwordEncoder.encode("password"))
-                    .roles(Collections.singletonList("USER"))
-                    .build()
+            users.save(users.save(
+                    SecuUser.builder()
+                            .userName("admin")
+                            .hashedPassword(passwordEncoder.encode("password"))
+                            .roles(Set.of(Role.USER, Role.ADMIN))
+                            .build())
             );
 
-            users.save(HotelUser.builder()
-                    .username("admin")
-                    .password(passwordEncoder.encode("password"))
-                    .roles(Arrays.asList("USER", "ADMIN"))
-                    .build()
+            users.save(users.save(
+                    SecuUser.builder()
+                            .userName("user")
+                            .hashedPassword(passwordEncoder.encode("password"))
+                            .roles(Set.of(Role.USER))
+                            .build())
             );
         };
 
