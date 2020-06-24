@@ -42,8 +42,8 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
             .and()
                 .authorizeRequests()
                 // TODO: delete /test endpoint after testing
-                .antMatchers("/", "/category/get-available-categories-in-time-frame/**/**","/auth/signin", "/category/all", "/test").permitAll() // allowed by anyone
-                .antMatchers("/auth/register-user").permitAll()
+                .antMatchers("/", "/category/get-available-categories-in-time-frame/**/**","/auth/signin", "/category/all").permitAll() // allowed by anyone
+                .antMatchers("/auth/register-user", "/get-user-from-token").permitAll()
                 .antMatchers("/booking/**").authenticated()
                 .anyRequest().denyAll()
             .and()

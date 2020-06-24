@@ -54,7 +54,7 @@ public class AuthController {
         }
     }
 
-    @GetMapping("/getuserfromtoken")
+    @GetMapping("/get-user-from-token")
     public HotelUser returnHotelUserFromToken(@RequestHeader String Authorization) {
         return controllerUtil.getUserFromToken(Authorization);
         //        return getUserFromToken(reqHeader);
