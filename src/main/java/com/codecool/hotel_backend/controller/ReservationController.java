@@ -20,27 +20,29 @@ import java.util.Optional;
 @RestController
 public class ReservationController {
 
-    ReservationRepository reservationRepository;
-    CategoryRepository categoryRepository;
-    RoomOrganiser roomOrganiser;
-    ReservedRoomRepository reservedRoomRepository;
-    UserRepository userRepository;
-    JwtTokenServices jwtTokenServices;
+    private final ReservationRepository reservationRepository;
+    private final CategoryRepository categoryRepository;
+    private final RoomOrganiser roomOrganiser;
+    private final ReservedRoomRepository reservedRoomRepository;
+    private final ControllerUtil controllerUtil;
 
     @Autowired
-    public ReservationController(CategoryRepository categoryRepository, ReservationRepository reservationRepository,
-                                 RoomOrganiser roomOrganiser, ReservedRoomRepository reservedRoomRepository,
-                                 UserRepository userRepository, JwtTokenServices jwtTokenServices) {
-        this.categoryRepository = categoryRepository;
+    public ReservationController(ReservationRepository reservationRepository,
+                                 CategoryRepository categoryRepository,
+                                 RoomOrganiser roomOrganiser,
+                                 ReservedRoomRepository reservedRoomRepository,
+                                 ControllerUtil controllerUtil) {
         this.reservationRepository = reservationRepository;
+        this.categoryRepository = categoryRepository;
         this.roomOrganiser = roomOrganiser;
         this.reservedRoomRepository = reservedRoomRepository;
-        this.userRepository = userRepository;
-        this.jwtTokenServices = jwtTokenServices;
+        this.controllerUtil = controllerUtil;
     }
 
     @RequestMapping("/get-reserved-and-reservation-joined")
-    public List<Reservation> test() {return reservationRepository.getAllReservationJoin();}
+    public List<Reservation> test() {
+        return reservationRepository.getAllReservationJoin();
+    }
 
     @RequestMapping(value = "/finalise_reservation/{res_id}/{room_id}/{start}/{end}", method = RequestMethod.POST)
     public boolean finaliseReservation(@PathVariable("res_id") Long res_id,
@@ -81,15 +83,9 @@ public class ReservationController {
         return roomOrganiser.getAvailableRoomsInCategory(start, end, id).size() > 0;
     }
 
-    private HotelUser getUserFromToken(String authorizationString) {
-        String token = jwtTokenServices.getTokenFromRequestHeaderAuthorization(authorizationString);
-        String loggedInUserName = jwtTokenServices.getUsernameFromToken(token);
-        return userRepository.getHotelUserByUsername(loggedInUserName);
-    }
-
     @GetMapping("/test")
     public HotelUser returnHotelUserFromToken(@RequestHeader String Authorization) {
-    return getUserFromToken(Authorization);
+        return controllerUtil.getUserFromToken(Authorization);
         //        return getUserFromToken(reqHeader);
     }
 

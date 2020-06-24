@@ -1,18 +1,15 @@
 package com.codecool.hotel_backend.controller;
 
+import com.codecool.hotel_backend.entity.HotelUser;
 import com.codecool.hotel_backend.entity.UserCredentials;
 import com.codecool.hotel_backend.security.JwtTokenServices;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.AuthenticationManager;
-import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.AuthenticationException;
 import org.springframework.security.core.GrantedAuthority;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.HashMap;
 import java.util.List;
@@ -24,12 +21,13 @@ import java.util.stream.Collectors;
 public class AuthController {
 
     private final AuthenticationManager authenticationManager;
-
     private final JwtTokenServices jwtTokenServices;
+    private final ControllerUtil controllerUtil;
 
-    public AuthController(AuthenticationManager authenticationManager, JwtTokenServices jwtTokenServices) {
+    public AuthController(AuthenticationManager authenticationManager, JwtTokenServices jwtTokenServices, ControllerUtil controllerUtil) {
         this.authenticationManager = authenticationManager;
         this.jwtTokenServices = jwtTokenServices;
+        this.controllerUtil = controllerUtil;
     }
 
     @PostMapping(value = "/signin")
@@ -54,5 +52,11 @@ public class AuthController {
             model.put("status", "WRONG");
             return ResponseEntity.ok(model);
         }
+    }
+
+    @GetMapping("/getuserfromtoken")
+    public HotelUser returnHotelUserFromToken(@RequestHeader String Authorization) {
+        return controllerUtil.getUserFromToken(Authorization);
+        //        return getUserFromToken(reqHeader);
     }
 }
