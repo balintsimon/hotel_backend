@@ -29,9 +29,6 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
         return super.authenticationManagerBean();
     }
 
-    // The main point for configuring Spring Security.
-    // In Spring Security every request goes trough a chain of filters; each filter checks the request for something
-    // and if one fails the request will fail.
     @Override
     protected void configure(HttpSecurity http) throws Exception {
         http.cors().and().csrf().disable();
@@ -41,10 +38,10 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
             .sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS)
             .and()
                 .authorizeRequests()
-                .antMatchers("/", "/category/get-available-categories-in-time-frame/**/**","/auth/signin", "/category/all").permitAll() // allowed by anyone
+                .antMatchers("/", "/category/get-available-categories-in-time-frame/**/**","/auth/signin", "/category/all").permitAll()
                 .antMatchers("/auth/register-user").permitAll()
                 .antMatchers("/booking/**").authenticated()
-                .antMatchers("/reservation/delete/{id}","/finalise_reservation/{res_id}/{room_id}/{start}/{end}","/all-available-category/{start}/{end}/{id}","/category/reserve/{category_id}/{start}/{end}").hasRole("ADMIN")
+                .antMatchers("/reservation/delete/{id}","/finalise_reservation/{res_id}/{room_id}/{start}/{end}","/all-available-category/{start}/{end}/{id}","/category/reserve/**").hasRole("ADMIN")
                 .anyRequest().denyAll()
             .and()
             .addFilterBefore(new JwtTokenFilter(jwtTokenServices), UsernamePasswordAuthenticationFilter.class);

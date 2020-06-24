@@ -132,14 +132,14 @@ public class HotelBackendApplication {
             users.save(HotelUser.builder()
                     .username("user")
                     .password(passwordEncoder.encode("password"))
-                    .roles(Collections.singletonList("ROLE_USER"))
+                    .roles(Collections.singletonList("USER"))
                     .build()
             );
 
             users.save(HotelUser.builder()
                     .username("admin")
                     .password(passwordEncoder.encode("password"))
-                    .roles(Arrays.asList("ROLE_USER", "ROLE_ADMIN"))
+                    .roles(Arrays.asList("USER", "ADMIN"))
                     .build()
             );
         };

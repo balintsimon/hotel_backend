@@ -3,6 +3,7 @@ package com.codecool.hotel_backend.controller;
 import com.codecool.hotel_backend.entity.UserCredentials;
 import com.codecool.hotel_backend.security.JwtTokenServices;
 import com.codecool.hotel_backend.service.UserUtils;
+import org.springframework.http.ResponseCookie;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.BadCredentialsException;
@@ -15,6 +16,8 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import javax.servlet.http.HttpServletResponse;
+import java.time.Duration;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -37,8 +40,7 @@ public class AuthController {
     }
 
     @PostMapping(value = "/signin")
-    public ResponseEntity signIn(@RequestBody UserCredentials data) {
-        Map<Object, Object> model = new HashMap<>();
+    public ResponseEntity<String> signIn(@RequestBody UserCredentials data, HttpServletResponse response) {
         try {
             String username = data.getUsername();
             Authentication authentication = authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(username, data.getPassword()));
@@ -49,14 +51,11 @@ public class AuthController {
 
             String token = jwtTokenServices.createToken(username, roles);
 
-            model.put("username", username);
-            model.put("roles", roles);
-            model.put("token", token);
-            model.put("status","DONE");
-            return ResponseEntity.ok(model);
+            addTokenToCookie(response,token);
+            System.out.println(roles);
+            return ResponseEntity.ok().body(data.getUsername());
         } catch (AuthenticationException e) {
-            model.put("status", "WRONG");
-            return ResponseEntity.ok(model);
+            return ResponseEntity.ok().body("WRONG");
         }
     }
 
@@ -64,5 +63,17 @@ public class AuthController {
     public String registration(@RequestBody UserCredentials data) {
         String response = userUtils.registerUser(data);
         return "{\"response\": \"" + response + "\"}"; // manual json, Look for modules
+    }
+
+    private void addTokenToCookie(HttpServletResponse response, String token) {
+        ResponseCookie cookie = ResponseCookie.from("token", token)
+                .domain("localhost") // should be parameterized
+                .sameSite("Strict")  // CSRF
+//                .secure(true)
+                .maxAge(Duration.ofHours(24))
+                .httpOnly(true)      // XSS
+                .path("/")
+                .build();
+        response.addHeader("Set-Cookie", cookie.toString());
     }
 }
