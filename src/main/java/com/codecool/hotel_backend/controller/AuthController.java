@@ -2,6 +2,7 @@ package com.codecool.hotel_backend.controller;
 
 import com.codecool.hotel_backend.entity.UserCredentials;
 import com.codecool.hotel_backend.security.JwtTokenServices;
+import com.codecool.hotel_backend.service.UserUtils;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.BadCredentialsException;
@@ -27,9 +28,12 @@ public class AuthController {
 
     private final JwtTokenServices jwtTokenServices;
 
-    public AuthController(AuthenticationManager authenticationManager, JwtTokenServices jwtTokenServices) {
+    private final UserUtils userUtils;
+
+    public AuthController(AuthenticationManager authenticationManager, JwtTokenServices jwtTokenServices, UserUtils userUtils) {
         this.authenticationManager = authenticationManager;
         this.jwtTokenServices = jwtTokenServices;
+        this.userUtils = userUtils;
     }
 
     @PostMapping(value = "/signin")
@@ -54,5 +58,11 @@ public class AuthController {
             model.put("status", "WRONG");
             return ResponseEntity.ok(model);
         }
+    }
+
+    @PostMapping(value = "/register-user")
+    public String registration(@RequestBody UserCredentials data) {
+        String response = userUtils.registerUser(data);
+        return "{\"response\": \"" + response + "\"}"; // manual json, Look for modules
     }
 }
