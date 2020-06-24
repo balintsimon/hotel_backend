@@ -2,82 +2,63 @@ package com.codecool.hotel_backend.security;
 
 import io.jsonwebtoken.*;
 import lombok.extern.slf4j.Slf4j;
+import io.jsonwebtoken.security.Keys;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
+import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Component;
+import org.springframework.stereotype.Service;
 
 import javax.annotation.PostConstruct;
 import javax.servlet.http.HttpServletRequest;
-import java.util.Base64;
-import java.util.Date;
-import java.util.LinkedList;
-import java.util.List;
+import java.security.Key;
+import java.util.*;
+import java.util.stream.Collectors;
 
-@Component
-@Slf4j
+@Service
 public class JwtTokenServices {
 
-    @Value("${security.jwt.token.secret-key:secret}")
-    private String secretKey = "secret";
-
-    @Value("${security.jwt.token.expire-length:3600000}")
-    private long validityInMilliseconds = 36000000; // 10h
-
-    private final String rolesFieldName = "roles";
+    private Key secretKey;
 
     @PostConstruct
-    protected void init() {
-        secretKey = Base64.getEncoder().encodeToString(secretKey.getBytes());
+    private void initKey() {
+        secretKey = Keys.secretKeyFor(SignatureAlgorithm.HS256);
     }
 
-    public String createToken(String username, List<String> roles) {
-        Claims claims = Jwts.claims().setSubject(username);
-        claims.put(rolesFieldName, roles);
+    public UsernamePasswordAuthenticationToken validateTokenAndExtractUserSpringToken(String token) {
+        Claims claims = Jwts.parserBuilder()
+                .setSigningKey(secretKey)
+                .build()
+                .parseClaimsJws(token)
+                .getBody();
+        ArrayList<String> rolesList = claims.get("roles", ArrayList.class);
+        List<SimpleGrantedAuthority> roles =
+                rolesList.stream()
+                        .map(SimpleGrantedAuthority::new)
+                        .collect(Collectors.toList());
+        return new UsernamePasswordAuthenticationToken(
+                claims.getSubject(),
+                null,
+                roles);
+    }
 
-        Date now = new Date();
-        Date validity = new Date(now.getTime() + validityInMilliseconds);
-
+    public String generateToken(Authentication authentication) {
+        List<String> roles = authentication
+                .getAuthorities()
+                .stream()
+                .map(GrantedAuthority::getAuthority)
+                .collect(Collectors.toList());
+        int jwtExpirationMinutes = 120000;
         return Jwts.builder()
-            .setClaims(claims)
-            .setIssuedAt(now)
-            .setExpiration(validity)
-            .signWith(SignatureAlgorithm.HS256, secretKey)
-            .compact();
-    }
-
-    String getTokenFromRequest(HttpServletRequest req) {
-        String bearerToken = req.getHeader("Cookie");
-        if (bearerToken != null) {
-            return bearerToken.substring(bearerToken.lastIndexOf("token=")+6);
-        }
-        return null;
-    }
-
-    boolean validateToken(String token) {
-        try {
-            Jws<Claims> claims = Jwts.parser().setSigningKey(secretKey).parseClaimsJws(token);
-            if (claims.getBody().getExpiration().before(new Date())) {
-                return false;
-            }
-            return true;
-        } catch (JwtException | IllegalArgumentException e) {
-            log.debug("JWT token invalid " + e);
-        }
-        return false;
-    }
-
-    Authentication parseUserFromTokenInfo(String token) throws UsernameNotFoundException {
-        Claims body = Jwts.parser().setSigningKey(secretKey).parseClaimsJws(token).getBody();
-        String username = body.getSubject();
-        List<String> roles = (List<String>) body.get(rolesFieldName);
-        List<SimpleGrantedAuthority> authorities = new LinkedList<>();
-        for (String role : roles) {
-            authorities.add(new SimpleGrantedAuthority(role));
-        }
-        return new UsernamePasswordAuthenticationToken(username, "", authorities);
+                .setSubject(authentication.getName())
+                .claim("roles", roles)
+                .setIssuedAt(new Date(System.currentTimeMillis()))
+                .setExpiration(new Date(System.currentTimeMillis() + 1000 * 60 * jwtExpirationMinutes))
+                .signWith(secretKey)
+                .compact();
     }
 
 }

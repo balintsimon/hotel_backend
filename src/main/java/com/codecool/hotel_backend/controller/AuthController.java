@@ -49,7 +49,7 @@ public class AuthController {
                     .map(GrantedAuthority::getAuthority)
                     .collect(Collectors.toList());
 
-            String token = jwtTokenServices.createToken(username, roles);
+            String token = jwtTokenServices.generateToken(authentication);
 
             addTokenToCookie(response,token);
             System.out.println(roles);
