@@ -87,6 +87,8 @@ public interface ReservationRepository extends JpaRepository<Reservation, Long> 
     Map<Category, Integer> getAllAvailableRoomsByCategoryInTimeFrame(@Param("startDate") LocalDate startDate, @Param("endDate") LocalDate endDate);
 
 
+    void deleteById(Long id);
+
     // TODO: fix issue with optional ID error in room.category.id
 //    @Query(value = "SELECT COUNT(room) FROM Room room" +
 //            " WHERE room.id NOT IN" +
