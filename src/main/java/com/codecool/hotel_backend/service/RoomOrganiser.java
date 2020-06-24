@@ -1,9 +1,6 @@
 package com.codecool.hotel_backend.service;
 
-import com.codecool.hotel_backend.entity.Category;
-import com.codecool.hotel_backend.entity.Reservation;
-import com.codecool.hotel_backend.entity.ReservedRoom;
-import com.codecool.hotel_backend.entity.Room;
+import com.codecool.hotel_backend.entity.*;
 import com.codecool.hotel_backend.repository.CategoryRepository;
 import com.codecool.hotel_backend.repository.ReservationRepository;
 import com.codecool.hotel_backend.repository.ReservedRoomRepository;
@@ -92,7 +89,7 @@ public class RoomOrganiser {
         return availableRooms;
     }
 
-    public boolean reserveRoom(Long categoryId, String start, String end) {
+    public boolean reserveRoomCategory(Long categoryId, String start, String end, HotelUser hotelUser) {
         // enddate is larger than startdate
         // startdate || Localdate.now || > localdate.now
         List<Room> availableRooms = getAvailableRoomsInCategory(start, end, categoryId);
@@ -110,6 +107,7 @@ public class RoomOrganiser {
                     .category(categoryRepository.findCategoryById(categoryId))
                     .startDate(startDate)
                     .endDate(endDate)
+                    .user(hotelUser)
                     .build();
             reservationRepository.saveAndFlush(reservation);
             return true;

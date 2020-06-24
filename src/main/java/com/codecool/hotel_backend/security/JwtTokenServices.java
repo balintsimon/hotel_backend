@@ -15,6 +15,7 @@ import java.util.Base64;
 import java.util.Date;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.function.Function;
 
 @Component
 @Slf4j
@@ -48,10 +49,17 @@ public class JwtTokenServices {
             .compact();
     }
 
-    String getTokenFromRequest(HttpServletRequest req) {
+    public String getTokenFromRequest(HttpServletRequest req) {
         String bearerToken = req.getHeader("Authorization");
         if (bearerToken != null && bearerToken.startsWith("Bearer ")) {
             return bearerToken.substring(7, bearerToken.length());
+        }
+        return null;
+    }
+
+    public String getTokenFromRequestHeaderAuthorization(String authorization) {
+        if (authorization != null && authorization.startsWith("Bearer ")) {
+            return authorization.substring(7, authorization.length());
         }
         return null;
     }
@@ -79,5 +87,38 @@ public class JwtTokenServices {
         }
         return new UsernamePasswordAuthenticationToken(username, "", authorities);
     }
+
+
+
+    public String getUsernameFromToken(String token) throws UsernameNotFoundException {
+        Claims body = Jwts.parser().setSigningKey(secretKey).parseClaimsJws(token).getBody();
+        String username = body.getSubject();
+        return username;
+
+//        return getClaimFromToken(token, Claims::getSubject);
+    }
+
+//    public Long getUserIdFromToken(String token) {
+//        String idString = getClaimFromToken(token, Claims::getId);
+//        try {
+//            return Long.parseLong(idString);
+//        } catch (Exception e) {
+//            System.out.println(e);
+//            return -1L;
+//        }
+//    }
+//
+//    public Date getExpirationDateFromToken(String token) {
+//        return getClaimFromToken(token, Claims::getExpiration);
+//    }
+//
+//    public <T> T getClaimFromToken(String token, Function<Claims, T> claimsResolver) {
+//        final Claims claims = getAllClaimsFromToken(token);
+//        return claimsResolver.apply(claims);
+//    }
+//
+//    private Claims getAllClaimsFromToken(String token) {
+//        return Jwts.parser().setSigningKey(secretKey).parseClaimsJws(token).getBody();
+//    }
 
 }

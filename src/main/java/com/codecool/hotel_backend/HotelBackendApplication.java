@@ -92,18 +92,27 @@ public class HotelBackendApplication {
 
                 counter++;
             }
+
+            HotelUser user = HotelUser.builder()
+                    .username("user")
+                    .password(passwordEncoder.encode("password"))
+                    .roles(Collections.singletonList("ROLE_USER"))
+                    .build();
+
+            users.save(user);
+
             Reservation reservation = Reservation.builder()
                     .category(luxury)
                     .startDate(LocalDate.of(2020, 6, 10))
                     .endDate(LocalDate.of(2020, 7, 20))
+                    .user(user)
                     .build();
             Reservation reservation2 = Reservation.builder()
                     .category(rockStarSuite)
                     .startDate(LocalDate.of(2020, 6, 15))
                     .endDate(LocalDate.of(2020, 7, 25))
+                    .user(user)
                     .build();
-
-
 
             luxury.setRoom(luxuryRooms);
             superiorStreetView.setRoom(superiorRooms);
@@ -125,16 +134,9 @@ public class HotelBackendApplication {
                     .reservation(reservation)
                     .build();
 
+            user.setReservations(Arrays.asList(reservation2, reservation));
+            users.saveAndFlush(user);
 
-
-            reservedRoomRepository.save(reservedRoom);
-
-            users.save(HotelUser.builder()
-                    .username("user")
-                    .password(passwordEncoder.encode("password"))
-                    .roles(Collections.singletonList("ROLE_USER"))
-                    .build()
-            );
 
             users.save(HotelUser.builder()
                     .username("admin")
@@ -142,6 +144,10 @@ public class HotelBackendApplication {
                     .roles(Arrays.asList("ROLE_USER", "ROLE_ADMIN"))
                     .build()
             );
+
+            reservedRoomRepository.save(reservedRoom);
+
+
         };
 
     }
