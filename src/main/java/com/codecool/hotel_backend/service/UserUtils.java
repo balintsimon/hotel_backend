@@ -26,10 +26,9 @@ public class UserUtils {
     public String registerUser(UserCredentials data) {
         String userName = data.getUsername();
         String password = data.getPassword();
-        System.out.println(userName);
 
         // First check for invalid input
-        char[] illegalCharacterList = {'.', ',', '+', '-', '[', ']', '{', '}', ' ', '"', '\''};
+        char[] illegalCharacterList = {'.', ',', '+', '-', '[', ']', '{', '}', ' ', '"', '\'', '/', '\\'};
         if (userName == null || userName.length() < 4) return "Username is too short";
         if (userName.length() > 20) return "Username is too long";
         if (password == null || password.length() < 4) return "Password is too short";
