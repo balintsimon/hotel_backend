@@ -39,8 +39,16 @@ public class ReservationController {
         this.controllerUtil = controllerUtil;
     }
 
+    // use this for the user's reservations
+    @RequestMapping("/get-reservations-of-user")
+    public List<Reservation> getAllReservationInfoOfUser(@RequestHeader String Authorization) {
+        HotelUser loggedInUser = controllerUtil.getUserFromToken(Authorization);
+        return reservationRepository.getReservationsByUser(loggedInUser);
+    }
+
+    // use this for amdmin: get all users' reservations
     @RequestMapping("/get-reserved-and-reservation-joined")
-    public List<Reservation> test() {
+    public List<Reservation> getAllReservationInfo() {
         return reservationRepository.getAllReservationJoin();
     }
 
@@ -55,7 +63,6 @@ public class ReservationController {
             e.printStackTrace();
             return false;
         }
-
     }
 
     @RequestMapping(value = "/get-all-reservations")
@@ -73,7 +80,13 @@ public class ReservationController {
                                @PathVariable("start") String start,
                                @PathVariable("end") String end,
                                @RequestHeader String Authorization) {
-        return roomOrganiser.reserveRoomCategory(id, start, end);
+        try {
+            HotelUser loggedInUser = controllerUtil.getUserFromToken(Authorization);
+            return roomOrganiser.reserveRoomCategory(id, start, end, loggedInUser);
+        } catch (Error e) {
+            System.out.println(e);
+            return false;
+        }
     }
 
     @RequestMapping(value = "/category/available/{id}/{start}/{end}", method = RequestMethod.POST)
@@ -81,12 +94,6 @@ public class ReservationController {
                                                            @PathVariable("start") String start,
                                                            @PathVariable("end") String end) {
         return roomOrganiser.getAvailableRoomsInCategory(start, end, id).size() > 0;
-    }
-
-    @GetMapping("/test")
-    public HotelUser returnHotelUserFromToken(@RequestHeader String Authorization) {
-        return controllerUtil.getUserFromToken(Authorization);
-        //        return getUserFromToken(reqHeader);
     }
 
 }

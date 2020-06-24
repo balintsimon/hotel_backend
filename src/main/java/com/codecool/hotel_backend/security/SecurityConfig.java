@@ -41,10 +41,15 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
             .sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS)
             .and()
                 .authorizeRequests()
-                // TODO: delete /test endpoint after testing
                 .antMatchers("/", "/category/get-available-categories-in-time-frame/**/**","/auth/signin", "/category/all").permitAll() // allowed by anyone
-                .antMatchers("/auth/register-user", "/get-user-from-token").permitAll()
-                .antMatchers("/booking/**").authenticated()
+                .antMatchers("/auth/register-user", "/get-user-from-token", "/room/**", "/get-reserved-and-reservation-joined").permitAll()
+                .antMatchers("/booking/**", "/get-reservations-of-user").authenticated()
+                .antMatchers("/reservation/delete/{id}",
+                        "/finalise_reservation/{res_id}/{room_id}/{start}/{end}",
+                        "/all-available-category/{start}/{end}/{id}",
+                        "/category/reserve/{category_id}/{start}/{end}",
+                        "/get-reserved-and-reservation-joined"
+                ).hasRole("ADMIN")
                 .anyRequest().denyAll()
             .and()
             .addFilterBefore(new JwtTokenFilter(jwtTokenServices), UsernamePasswordAuthenticationFilter.class);

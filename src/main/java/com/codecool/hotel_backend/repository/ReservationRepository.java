@@ -1,10 +1,7 @@
 package com.codecool.hotel_backend.repository;
 
 import ch.qos.logback.core.boolex.EvaluationException;
-import com.codecool.hotel_backend.entity.Category;
-import com.codecool.hotel_backend.entity.Reservation;
-import com.codecool.hotel_backend.entity.ReservedRoom;
-import com.codecool.hotel_backend.entity.Room;
+import com.codecool.hotel_backend.entity.*;
 import org.hibernate.annotations.Fetch;
 import org.hibernate.annotations.FetchMode;
 import org.springframework.data.jpa.repository.JpaRepository;
@@ -24,6 +21,9 @@ public interface ReservationRepository extends JpaRepository<Reservation, Long> 
             "Reserved_Room on Reserved_Room.reservation_id = Reservation.id"
     , nativeQuery=true)
     List<Reservation> getAllReservationJoin();
+
+    @Query(value = "select reservation from Reservation reservation WHERE reservation.user = :loggedInUser")
+    List<Reservation> getReservationsByUser(@Param("loggedInUser") HotelUser User);
 
     List<Reservation> getAllById(Long id);
 
