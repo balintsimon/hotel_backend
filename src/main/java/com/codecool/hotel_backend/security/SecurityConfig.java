@@ -43,7 +43,8 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                 .authorizeRequests()
                 // TODO: delete /test endpoint after testing
                 .antMatchers("/", "/category/get-available-categories-in-time-frame/**/**","/auth/signin", "/category/all", "/test").permitAll() // allowed by anyone
-                .antMatchers("/booking/**").hasRole("ADMIN")
+                .antMatchers("/auth/register-user").permitAll()
+                .antMatchers("/booking/**").authenticated()
                 .anyRequest().denyAll()
             .and()
             .addFilterBefore(new JwtTokenFilter(jwtTokenServices), UsernamePasswordAuthenticationFilter.class);
