@@ -43,6 +43,7 @@ public class RoomController {
         return roomOrganiser.getAvailableRooms(start, end);
     }
 
+    // TODO: is this used at all?
     @GetMapping("/all-taken/{start}/{end}")
     public List<Room> getAllTakenRoomsInTimeFrame(@PathVariable("start") String start,
                                                       @PathVariable("end") String end) {
@@ -56,6 +57,7 @@ public class RoomController {
         return roomOrganiser.getAvailableRoomsInCategory(start, end, id);
     }
 
+    // TODO: is this used at all?
     @GetMapping("/first-available-category/{start}/{end}/{id}")
     public Room getFirstAvailableRoomsInTimeFrameInCategory(@PathVariable("id") Long id,
                                                                 @PathVariable("start") String start,
@@ -63,6 +65,7 @@ public class RoomController {
         return roomOrganiser.getFirstAvailableRoomInCategory(start, end, id);
     }
 
+    // TODO: is this used at all?
     @GetMapping("/all-taken-category/{start}/{end}/{id}")
     public List<Room> getAllTakenRoomsInTimeFrameInCategory(@PathVariable("id") Long id,
                                                             @PathVariable("start") String start,
