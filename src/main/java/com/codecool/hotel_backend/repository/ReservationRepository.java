@@ -18,7 +18,8 @@ public interface ReservationRepository extends JpaRepository<Reservation, Long> 
 
 
     @Query(value = "select * from Reservation left join " +
-            "Reserved_Room on Reserved_Room.reservation_id = Reservation.id"
+            //"Reserved_Room on Reserved_Room.reservation_id = Reservation.id" +
+            " Hotel_User on Hotel_User.id=Reservation.user_id"
     , nativeQuery=true)
     List<Reservation> getAllReservationJoin();
 
