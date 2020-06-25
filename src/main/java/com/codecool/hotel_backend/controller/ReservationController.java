@@ -81,21 +81,13 @@ public class ReservationController {
     public List<ReservedRoom> getAllReservedRooms() {
         return reservedRoomRepository.findAll();
     }
-
-
-    // TODO: refactor this nightmare!
+    
     @RequestMapping(value = "/category/reserve/{category_id}/{start}/{end}", method = RequestMethod.POST)
     public boolean reserveRoom(@PathVariable("category_id") Long id,
                                @PathVariable("start") String start,
                                @PathVariable("end") String end,
                                @RequestHeader String Authorization) {
-        try {
-            HotelUser loggedInUser = controllerUtil.getUserFromToken(Authorization);
-            return roomOrganiser.reserveRoomCategory(id, start, end, loggedInUser);
-        } catch (Error e) {
-            System.out.println(e);
-            return false;
-        }
+            return roomOrganiser.reserveRoomCategory(id, start, end, Authorization);
     }
 
     // TODO: is this used at all?
