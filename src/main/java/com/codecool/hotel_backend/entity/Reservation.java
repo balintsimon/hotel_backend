@@ -37,7 +37,7 @@ public class Reservation {
             cascade = {CascadeType.PERSIST, CascadeType.REMOVE})
     private ReservedRoom reservedRoom;
 
-    @JsonBackReference
+    @JsonManagedReference
     @ManyToOne
     private HotelUser user;
 

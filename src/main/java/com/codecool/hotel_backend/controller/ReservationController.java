@@ -13,6 +13,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletRequest;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
@@ -50,6 +51,15 @@ public class ReservationController {
     @RequestMapping("/get-reserved-and-reservation-joined")
     public List<Reservation> getAllReservationInfo() {
         return reservationRepository.getAllReservationJoin();
+    }
+    @RequestMapping("/get-all-user-with-reservation")
+    public List<HotelUser> getAllUserWithReservation() {
+        List<HotelUser> hotelUsers=new ArrayList<>();
+        List<Reservation> reservations=reservationRepository.getAllReservationJoin();
+        for (Reservation reservation:reservations) {
+            hotelUsers.add(reservation.getUser());
+        }
+        return hotelUsers;
     }
 
     @RequestMapping(value = "/finalise_reservation/{res_id}/{room_id}/{start}/{end}", method = RequestMethod.POST)

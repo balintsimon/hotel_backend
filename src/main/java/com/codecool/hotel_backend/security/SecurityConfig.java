@@ -57,7 +57,8 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                         "/finalise_reservation/**",
                         "/all-available-category/**",
                         "/get-all-reservations",
-                        "/get-reserved-and-reservation-joined"
+                        "/get-reserved-and-reservation-joined",
+                        "/get-all-user-with-reservation"
 //                        "/get-all-reserved-rooms",
                 ).hasRole("ADMIN")
                 .anyRequest().denyAll()
