@@ -90,8 +90,12 @@ public class RoomOrganiser {
     }
 
     public boolean reserveRoomCategory(Long categoryId, String start, String end, HotelUser hotelUser) {
-        // enddate is larger than startdate
-        // startdate || Localdate.now || > localdate.now
+        // Check if category returns anything, if not break
+
+        Category currentCategory = categoryRepository.findCategoryById(categoryId);
+
+        if (currentCategory == null) return false;
+
         List<Room> availableRooms = getAvailableRoomsInCategory(start, end, categoryId);
         LocalDate startDate = organiserUtils.convertStringToLocalDate(start);
         LocalDate endDate = organiserUtils.convertStringToLocalDate(end);
