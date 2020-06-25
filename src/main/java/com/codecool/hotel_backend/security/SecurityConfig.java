@@ -41,15 +41,23 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
             .sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS)
             .and()
                 .authorizeRequests()
-                .antMatchers("/", "/category/get-available-categories-in-time-frame/**/**","/auth/signin", "/category/all").permitAll() // allowed by anyone
-                .antMatchers("/auth/register-user", "/get-user-from-token", "/room/**", "/get-reserved-and-reservation-joined").permitAll()
-                .antMatchers("/booking/**", "/get-reservations-of-user").authenticated()
-                .antMatchers("/reservation/delete/{id}",
-                        "/finalise_reservation/{res_id}/{room_id}/{start}/{end}",
-                        "/all-available-category/{start}/{end}/{id}",
-                        "/category/reserve/{category_id}/{start}/{end}",
-                        "/get-reserved-and-reservation-joined",
-                        "/get-all-reservations"
+                .antMatchers("/",
+                        "/category/get-available-categories-in-time-frame/**",
+                        "/auth/signin",
+                        "/category/all",
+                        "/auth/register-user",
+                        "/auth/get-user-from-token",
+                        "/room/**",
+                        "/get-reserved-and-reservation-joined").permitAll()
+                .antMatchers("/booking/**",
+                        "/category/reserve/**",
+                        "/get-all-reservations",
+                        "/get-reservations-of-user").authenticated()
+                .antMatchers("/reservation/delete/**",
+                        "/finalise_reservation/**",
+                        "/all-available-category/**",
+                        "/get-reserved-and-reservation-joined"
+//                        "/get-all-reserved-rooms",
                 ).hasRole("ADMIN")
                 .anyRequest().denyAll()
             .and()
