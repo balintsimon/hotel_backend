@@ -24,7 +24,9 @@ public class RoomOrganiser {
     private final ControllerUtil controllerUtil;
 
     @Autowired
-    public RoomOrganiser(OrganiserUtils organiserUtils, CategoryRepository categoryRepository, ReservationRepository reservationRepository, ReservedRoomRepository reservedRoomRepository, RoomRepository roomRepository, ControllerUtil controllerUtil) {
+    public RoomOrganiser(OrganiserUtils organiserUtils, CategoryRepository categoryRepository,
+                         ReservationRepository reservationRepository, ReservedRoomRepository reservedRoomRepository,
+                         RoomRepository roomRepository, ControllerUtil controllerUtil) {
         this.organiserUtils = organiserUtils;
         this.categoryRepository = categoryRepository;
         this.reservationRepository = reservationRepository;
@@ -57,7 +59,8 @@ public class RoomOrganiser {
         reservationRepository.updateReservation(reservationId, startDate, endDate); // This properly updates the reservation
         if (roomAlreadyReserved) {
             reservedRoomRepository.updateReservedRoom(reservedRoom.getId(), roomId); // This updates the reserved room if needed
-        } else {        System.out.println("was here");
+        } else {
+            System.out.println("was here");
             reservedRoomRepository.save(reservedRoom);
         }
 
@@ -90,34 +93,38 @@ public class RoomOrganiser {
         return availableRooms;
     }
 
-    public boolean reserveRoomCategory(Long categoryId, String start, String end, HotelUser hotelUser) {
-        // Check if category returns anything, if not break
-
+    public boolean reserveRoomCategory(Long categoryId, String start, String end, String token) {
         Category currentCategory = categoryRepository.findCategoryById(categoryId);
-
         if (currentCategory == null) return false;
 
-        List<Room> availableRooms = getAvailableRoomsInCategory(start, end, categoryId);
+        List<Reservation> takenRooms = getReservedRoomInCategoryInTimeFrame(start, end, categoryId);
+        List<Room> allRoomsInCategory = roomRepository.findAllByCategory_Id(categoryId);
         LocalDate startDate = organiserUtils.convertStringToLocalDate(start);
         LocalDate endDate = organiserUtils.convertStringToLocalDate(end);
         LocalDate currentDate = LocalDate.now();
-        if (endDate.isBefore(startDate)) {
-            return false;
-        } else if (startDate.isBefore(currentDate)){
-            return false;
-        }
 
-        if (availableRooms != null) {
-            Reservation reservation = Reservation.builder()
-                    .category(categoryRepository.findCategoryById(categoryId))
-                    .startDate(startDate)
-                    .endDate(endDate)
-                    .user(hotelUser)
-                    .build();
-            reservationRepository.saveAndFlush(reservation);
-            return true;
+        try {
+            HotelUser hotelUser = controllerUtil.getUserFromToken(token);
+            if (endDate.isBefore(startDate)) {
+                return false;
+            } else if (startDate.isBefore(currentDate)) {
+                return false;
+            }
+            if (allRoomsInCategory.size() > takenRooms.size()) {
+                Reservation reservation = Reservation.builder()
+                        .category(categoryRepository.findCategoryById(categoryId))
+                        .startDate(startDate)
+                        .endDate(endDate)
+                        .user(hotelUser)
+                        .build();
+                reservationRepository.saveAndFlush(reservation);
+                return true;
+            }
+            return false;
+        } catch (Error e) {
+            System.out.println(e);
+            return false;
         }
-        return false;
     }
 
     public List<Category> getAvailableCategoriesInTimeFrame(String start, String end) {
@@ -151,7 +158,6 @@ public class RoomOrganiser {
         }
         return reservationsInCategoryInTimeFrame;
     }
-
 
 
     public Room getFirstAvailableRoomInCategory(String start, String end, Long categoryId) {
@@ -248,7 +254,7 @@ public class RoomOrganiser {
     public List<Reservation> getAllReservations() {
         return reservationRepository.findAll();
     }
-    
+
     public List<Reservation> getMyReservations(String authorization) {
         List<Reservation> myReservations = new ArrayList<>();
         List<Reservation> allReservations = getAllReservations();
