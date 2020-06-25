@@ -11,13 +11,15 @@ import java.util.List;
 @RestController
 @RequestMapping("/category")
 public class CategoryController {
-    CategoryRepository categoryRepository;
-    RoomOrganiser roomOrganiser;
+    private final CategoryRepository categoryRepository;
+    private final RoomOrganiser roomOrganiser;
+    private final ControllerUtil controllerUtil;
 
     @Autowired
-    public CategoryController(CategoryRepository categoryRepository, RoomOrganiser roomOrganiser) {
+    public CategoryController(CategoryRepository categoryRepository, RoomOrganiser roomOrganiser, ControllerUtil controllerUtil) {
         this.categoryRepository = categoryRepository;
         this.roomOrganiser = roomOrganiser;
+        this.controllerUtil = controllerUtil;
     }
 
     @GetMapping("/{id}")

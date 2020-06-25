@@ -21,13 +21,15 @@ public class RoomController {
     private ReservationRepository reservationRepository;
     private ReservedRoomRepository reservedRoomRepository;
     private RoomOrganiser roomOrganiser;
+    private final ControllerUtil controllerUtil;
 
     @Autowired
-    public RoomController(RoomRepository roomRepository, ReservedRoomRepository reservedRoomRepository, ReservationRepository reservationRepository, RoomOrganiser roomOrganiser) {
+    public RoomController(RoomRepository roomRepository, ReservedRoomRepository reservedRoomRepository, ReservationRepository reservationRepository, RoomOrganiser roomOrganiser, ControllerUtil controllerUtil) {
         this.roomRepository = roomRepository;
         this.reservedRoomRepository = reservedRoomRepository;
         this.reservationRepository = reservationRepository;
         this.roomOrganiser = roomOrganiser;
+        this.controllerUtil = controllerUtil;
     }
 
     @GetMapping("/all")
