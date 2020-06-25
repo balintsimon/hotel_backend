@@ -57,7 +57,7 @@ public class RoomOrganiser {
         reservationRepository.updateReservation(reservationId, startDate, endDate); // This properly updates the reservation
         if (roomAlreadyReserved) {
             reservedRoomRepository.updateReservedRoom(reservedRoom.getId(), roomId); // This updates the reserved room if needed
-        } else {
+        } else {        System.out.println("was here");
             reservedRoomRepository.save(reservedRoom);
         }
 
@@ -121,27 +121,38 @@ public class RoomOrganiser {
     }
 
     public List<Category> getAvailableCategoriesInTimeFrame(String start, String end) {
+        List<Category> availableCategories = new ArrayList<>(); // return list
 
         List<Category> categoryList = categoryRepository.findAll();
-        List<Long> categoryIdList = new ArrayList<>();
-        List<Category> availableCategories = new ArrayList<>();
 
         for (Category category : categoryList) {
-            categoryIdList.add(category.getId());
-        }
-
-        // This search is inefficient because it asks all the number of rooms in a category
-        // But I didn't have time to do a cleaner implementation yet
-        // TODO: Optimise this
-        for (Long categoryId : categoryIdList) {
-            List<Room> availableRoomsInCategory = getAvailableRoomsInCategory(start, end, categoryId);
-            if (availableRoomsInCategory != null) {
-                availableCategories.add(categoryRepository.findCategoryById(categoryId));
+            List<Reservation> takenRooms = getReservedRoomInCategoryInTimeFrame(start, end, category.getId());
+            List<Room> allRoomsInCategory = roomRepository.findAllByCategory_Id(category.getId());
+            if (allRoomsInCategory.size() > takenRooms.size()) {
+                availableCategories.add(category);
             }
         }
-
         return availableCategories;
     }
+
+    public List<Reservation> getReservedRoomInCategoryInTimeFrame(String start, String end, Long categoryId) {
+        List<Reservation> reservationsInCategoryInTimeFrame = new ArrayList<>();
+
+        LocalDate startDate = organiserUtils.convertStringToLocalDate(start);
+        LocalDate endDate = organiserUtils.convertStringToLocalDate(end);
+        List<Reservation> reservations = reservationRepository.findAll();
+        List<Reservation> foundReservations = organiserUtils.findReservationsInTimeFrame(startDate, endDate, reservations);
+
+        for (Reservation actualReservation : foundReservations) {
+            System.out.println(actualReservation);
+            if (actualReservation.getCategory().getId() == categoryId) {
+                reservationsInCategoryInTimeFrame.add(actualReservation);
+            }
+        }
+        return reservationsInCategoryInTimeFrame;
+    }
+
+
 
     public Room getFirstAvailableRoomInCategory(String start, String end, Long categoryId) {
         List<Room> allAvailableRooms = getAvailableRoomsInCategory(start, end, categoryId);
