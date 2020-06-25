@@ -235,7 +235,7 @@ public class RoomOrganiser {
     }
     
     public List<Reservation> getMyReservations(String authorization) {
-        List<Reservation> myReservations = null;
+        List<Reservation> myReservations = new ArrayList<>();
         List<Reservation> allReservations = getAllReservations();
         try {
             HotelUser myUser = controllerUtil.getUserFromToken(authorization);
