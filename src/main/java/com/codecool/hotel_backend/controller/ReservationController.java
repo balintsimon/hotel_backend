@@ -65,16 +65,25 @@ public class ReservationController {
         }
     }
 
+    // TODO: deprecated for users. Delete if admin does not uses it.
     @RequestMapping(value = "/get-all-reservations")
     public List<Reservation> getAllReservations() {
         return roomOrganiser.getAllReservations();
     }
 
+    @RequestMapping(value = "/get-my-reservations")
+    public List<Reservation> getMyReservations(@RequestHeader String Authorization) {
+        return roomOrganiser.getMyReservations(Authorization);
+    }
+
+    // TODO: is this used at all?
     @RequestMapping(value = "/get-all-reserved-rooms")
     public List<ReservedRoom> getAllReservedRooms() {
         return reservedRoomRepository.findAll();
     }
 
+
+    // TODO: refactor this nightmare!
     @RequestMapping(value = "/category/reserve/{category_id}/{start}/{end}", method = RequestMethod.POST)
     public boolean reserveRoom(@PathVariable("category_id") Long id,
                                @PathVariable("start") String start,
@@ -89,12 +98,15 @@ public class ReservationController {
         }
     }
 
+    // TODO: is this used at all?
     @RequestMapping(value = "/category/available/{id}/{start}/{end}", method = RequestMethod.POST)
     public boolean checkIfCategoryAvailableInTimeFrameById(@PathVariable("id") Long id,
                                                            @PathVariable("start") String start,
                                                            @PathVariable("end") String end) {
         return roomOrganiser.getAvailableRoomsInCategory(start, end, id).size() > 0;
     }
+
+    // TODO: identify used by token
     @DeleteMapping("/reservation/delete/{id}")
     public void removeCompleted(@PathVariable("id") Long id) {
         reservationRepository.deleteById(id);

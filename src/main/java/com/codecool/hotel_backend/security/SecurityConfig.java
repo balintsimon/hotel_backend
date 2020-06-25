@@ -51,11 +51,12 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                         "/get-reserved-and-reservation-joined").permitAll()
                 .antMatchers("/booking/**",
                         "/category/reserve/**",
-                        "/get-all-reservations",
+                        "/get-my-reservations",
                         "/get-reservations-of-user").authenticated()
                 .antMatchers("/reservation/delete/**",
                         "/finalise_reservation/**",
                         "/all-available-category/**",
+                        "/get-all-reservations",
                         "/get-reserved-and-reservation-joined"
 //                        "/get-all-reserved-rooms",
                 ).hasRole("ADMIN")

@@ -1,35 +1,36 @@
 package com.codecool.hotel_backend.service;
 
+import com.codecool.hotel_backend.controller.ControllerUtil;
 import com.codecool.hotel_backend.entity.*;
 import com.codecool.hotel_backend.repository.CategoryRepository;
 import com.codecool.hotel_backend.repository.ReservationRepository;
 import com.codecool.hotel_backend.repository.ReservedRoomRepository;
 import com.codecool.hotel_backend.repository.RoomRepository;
-import net.bytebuddy.asm.Advice;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 import java.time.LocalDate;
-import java.time.format.DateTimeParseException;
 import java.util.ArrayList;
 import java.util.List;
 
 @Component
 public class RoomOrganiser {
 
-    private OrganiserUtils organiserUtils;
-    private CategoryRepository categoryRepository;
-    private ReservationRepository reservationRepository;
-    private ReservedRoomRepository reservedRoomRepository;
-    private RoomRepository roomRepository;
+    private final OrganiserUtils organiserUtils;
+    private final CategoryRepository categoryRepository;
+    private final ReservationRepository reservationRepository;
+    private final ReservedRoomRepository reservedRoomRepository;
+    private final RoomRepository roomRepository;
+    private final ControllerUtil controllerUtil;
 
     @Autowired
-    public RoomOrganiser(OrganiserUtils organiserUtils, CategoryRepository categoryRepository, ReservationRepository reservationRepository, ReservedRoomRepository reservedRoomRepository, RoomRepository roomRepository) {
+    public RoomOrganiser(OrganiserUtils organiserUtils, CategoryRepository categoryRepository, ReservationRepository reservationRepository, ReservedRoomRepository reservedRoomRepository, RoomRepository roomRepository, ControllerUtil controllerUtil) {
         this.organiserUtils = organiserUtils;
         this.categoryRepository = categoryRepository;
         this.reservationRepository = reservationRepository;
         this.reservedRoomRepository = reservedRoomRepository;
         this.roomRepository = roomRepository;
+        this.controllerUtil = controllerUtil;
     }
 
     public boolean finaliseReservation(Long reservationId, Long roomId, String start, String end) throws IllegalArgumentException {
@@ -235,5 +236,22 @@ public class RoomOrganiser {
 
     public List<Reservation> getAllReservations() {
         return reservationRepository.findAll();
+    }
+    
+    public List<Reservation> getMyReservations(String authorization) {
+        List<Reservation> myReservations = new ArrayList<>();
+        List<Reservation> allReservations = getAllReservations();
+        try {
+            HotelUser myUser = controllerUtil.getUserFromToken(authorization);
+            for (Reservation actualReservation : allReservations) {
+                if (actualReservation.getUser() == myUser) {
+                    myReservations.add(actualReservation);
+                }
+            }
+            return myReservations;
+        } catch (Error e) {
+            System.out.println(e);
+            return null;
+        }
     }
 }
