@@ -20,7 +20,7 @@ public interface ReservationRepository extends JpaRepository<Reservation, Long> 
     @Query(value = "select * from Reservation left join " +
             //"Reserved_Room on Reserved_Room.reservation_id = Reservation.id" +
             " Hotel_User on Hotel_User.id=Reservation.user_id"
-    , nativeQuery=true)
+    , nativeQuery=true) // native query runs on h2 directly
     List<Reservation> getAllReservationJoin();
 
     @Query(value = "select reservation from Reservation reservation WHERE reservation.user = :loggedInUser")

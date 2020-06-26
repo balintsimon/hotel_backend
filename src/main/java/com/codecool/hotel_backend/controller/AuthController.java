@@ -4,6 +4,8 @@ import com.codecool.hotel_backend.entity.HotelUser;
 import com.codecool.hotel_backend.entity.UserCredentials;
 import com.codecool.hotel_backend.security.JwtTokenServices;
 import com.codecool.hotel_backend.service.UserUtils;
+import lombok.RequiredArgsConstructor;
+import org.springframework.beans.factory.annotation.Required;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
@@ -19,6 +21,7 @@ import java.util.stream.Collectors;
 
 @RestController
 @RequestMapping(value = "/auth")
+@RequiredArgsConstructor
 public class AuthController {
 
     private final AuthenticationManager authenticationManager;
@@ -28,12 +31,6 @@ public class AuthController {
 
     private final UserUtils userUtils;
 
-    public AuthController(AuthenticationManager authenticationManager, JwtTokenServices jwtTokenServices, UserUtils userUtils, ControllerUtil controllerUtil) {
-        this.authenticationManager = authenticationManager;
-        this.jwtTokenServices = jwtTokenServices;
-        this.userUtils = userUtils;
-        this.controllerUtil = controllerUtil;
-    }
 
     @PostMapping(value = "/signin")
     public ResponseEntity signIn(@RequestBody UserCredentials data) {
@@ -60,9 +57,9 @@ public class AuthController {
     }
 
     @PostMapping(value = "/register-user")
-    public String registration(@RequestBody UserCredentials data) {
+    public ResponseType registration(@RequestBody UserCredentials data) {
         String response = userUtils.registerUser(data);
-        return "{\"response\": \"" + response + "\"}"; // manual json, Look for modules
+        return new ResponseType(response);
     }
 
     @GetMapping("/get-user-from-token")

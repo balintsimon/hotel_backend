@@ -9,6 +9,7 @@ import java.time.LocalDate;
 import java.time.format.DateTimeParseException;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Component
 public class OrganiserUtils {
@@ -21,17 +22,26 @@ public class OrganiserUtils {
     }
 
     List<ReservedRoom> getReservedRoomsFromReservations(List<Reservation> reservations, List<ReservedRoom> reservedRooms) {
-        List<ReservedRoom> foundReservedRooms = new ArrayList<>();
+        return reservedRooms.parallelStream()
+                .filter(reservedRoom -> reservations.contains(reservedRoom.getReservation()))
+                .collect(Collectors.toList());
 
-        for (ReservedRoom actualReservedRoom : reservedRooms) {
-            if (reservations.contains(actualReservedRoom.getReservation())) {
-                foundReservedRooms.add(actualReservedRoom);
-            }
-        }
-        return foundReservedRooms;
+        // Learn map filter reduce
+
+
+//        List<ReservedRoom> foundReservedRooms = new ArrayList<>();
+//
+//        for (ReservedRoom actualReservedRoom : reservedRooms) {
+//            if (reservations.contains(actualReservedRoom.getReservation())) {
+//                foundReservedRooms.add(actualReservedRoom);
+//            }
+//        }
+//        return foundReservedRooms;
     }
 
     List<Reservation> findReservationsInTimeFrame(LocalDate startDate, LocalDate endDate, List<Reservation> reservations) {
+
+        // refactor to functional
         List<Reservation> foundReservations = new ArrayList<>();
         for (Reservation reservation : reservations) {
             assert startDate != null;

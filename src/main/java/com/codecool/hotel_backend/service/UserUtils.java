@@ -4,6 +4,7 @@ import antlr.StringUtils;
 import com.codecool.hotel_backend.entity.HotelUser;
 import com.codecool.hotel_backend.entity.UserCredentials;
 import com.codecool.hotel_backend.repository.UserRepository;
+import lombok.RequiredArgsConstructor;
 import org.springframework.security.crypto.factory.PasswordEncoderFactories;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Component;
@@ -13,19 +14,17 @@ import java.util.Collections;
 import java.util.List;
 
 @Component
+@RequiredArgsConstructor
 public class UserUtils {
 
     private final UserRepository userRepository;
     private final PasswordEncoder passwordEncoder;
 
-    public UserUtils(UserRepository userRepository) {
-        this.userRepository = userRepository;
-        this.passwordEncoder = PasswordEncoderFactories.createDelegatingPasswordEncoder();
-    }
-
     public String registerUser(UserCredentials data) {
         String userName = data.getUsername();
         String password = data.getPassword();
+
+        // Linked list validation chain with booleans
 
         // First check for invalid input
         char[] illegalCharacterList = {'.', ',', '+', '-', '[', ']', '{', '}', ' ', '"', '\'', '/', '\\'};

@@ -2,7 +2,6 @@ package com.codecool.hotel_backend.controller;
 
 import com.codecool.hotel_backend.entity.HotelUser;
 import com.codecool.hotel_backend.entity.Reservation;
-import com.codecool.hotel_backend.entity.Room;
 import com.codecool.hotel_backend.repository.ReservationRepository;
 import com.codecool.hotel_backend.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -19,11 +18,10 @@ public class UserController {
         this.userRepository=userRepository;
     }
 
-    @GetMapping("/userByReservation/{reservationId}")
-    public HotelUser getAllRooms(@PathVariable("reservationId") long reservationId) {
+    @GetMapping("/userByReservation/{reservationId}") // /reservation/user/1
+    public HotelUser getAllRooms(@PathVariable("reservationId") Long reservationId) {
         Reservation reservation= reservationRepository.findReservationById(reservationId);
-        HotelUser hotelUser=userRepository.getHotelUserByReservations(reservation);
-        return hotelUser;
+        return userRepository.getHotelUserByReservations(reservation);
     }
 
 
